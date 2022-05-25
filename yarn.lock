@@ -705,6 +705,11 @@
     "@emotion/weak-memoize" "^0.2.5"
     stylis "4.0.13"
 
+"@emotion/core@^11.0.0":
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/@emotion/core/-/core-11.0.0.tgz#d075867e07864119de7cfd5268c15012bd2d6290"
+  integrity sha512-w4sE3AmHmyG6RDKf6mIbtHpgJUSJ2uGvPQb8VXFL7hFjMPibE8IiehG8cMX3Ztm4svfCQV6KqusQbeIOkurBcA==
+
 "@emotion/hash@^0.8.0":
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/@emotion/hash/-/hash-0.8.0.tgz#bbbff68978fefdbe68ccb533bc8cbe1d1afb5413"
@@ -734,7 +739,7 @@
   resolved "https://registry.yarnpkg.com/@emotion/memoize/-/memoize-0.7.5.tgz#2c40f81449a4e554e9fc6396910ed4843ec2be50"
   integrity sha512-igX9a37DR2ZPGYtV6suZ6whr8pTFtyHL3K/oLUotxpSVO2ASaprmAe2Dkq7tBo7CRY7MMDrAa9nuQP9/YG8FxQ==
 
-"@emotion/react@^11.9.0":
+"@emotion/react@^11":
   version "11.9.0"
   resolved "https://registry.yarnpkg.com/@emotion/react/-/react-11.9.0.tgz#b6d42b1db3bd7511e7a7c4151dc8bc82e14593b8"
   integrity sha512-lBVSF5d0ceKtfKCDQJveNAtkC7ayxpVlgOohLgXqRwqWr9bOf4TZAFFyIcNngnV6xK6X4x2ZeXq7vliHkoVkxQ==
@@ -763,7 +768,7 @@
   resolved "https://registry.yarnpkg.com/@emotion/sheet/-/sheet-1.1.0.tgz#56d99c41f0a1cda2726a05aa6a20afd4c63e58d2"
   integrity sha512-u0AX4aSo25sMAygCuQTzS+HsImZFuS8llY8O7b9MDRzbJM0kVJlAz6KNDqcG7pOuQZJmj/8X/rAW+66kMnMW+g==
 
-"@emotion/styled@^11.8.1":
+"@emotion/styled@^11":
   version "11.8.1"
   resolved "https://registry.yarnpkg.com/@emotion/styled/-/styled-11.8.1.tgz#856f6f63aceef0eb783985fa2322e2bf66d04e17"
   integrity sha512-OghEVAYBZMpEquHZwuelXcRjRJQOVayvbmNR0zr174NHdmMgrNkLC6TljKC5h9lZLkN5WGrdUcrKlOJ4phhoTQ==
@@ -1933,7 +1938,7 @@ form-data@^4.0.0:
     combined-stream "^1.0.8"
     mime-types "^2.1.12"
 
-framer-motion@^6.3.4:
+framer-motion@^6:
   version "6.3.4"
   resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-6.3.4.tgz#b8035f60c6d7863162310ddee32eb386212a3ce7"
   integrity sha512-FXHqpY23g0MhznXpAf94SyEmUqfw7KoLaCQqTKrjWZgQzMkjvfOgOVYKUA9Dlmys6XGn0qN+AMzjhFJ1N5bH+A==
