@@ -6,9 +6,9 @@
   🤓 <strong>WELCOME</strong> 🤓
 </p>
 
-##
+---
 
-## About this project 🔎 <img src="https://img.shields.io/github/stars/heitor-sampaio/worldtrip?style=for-the-badge" alt="GitHub Project Starts" align="right">
+## About this project 🔎
 
 <p align="center">
   <img src="public/logo.png" alt="World Trip" width="300"/>
@@ -18,7 +18,7 @@
 
 Destinations informations are categorized by continents, where you can find valuable information about the continent itself and a list of suggested cities to visit.
 
-🌐 **This application is in production in [Vercel](https://vercel.com/) and you can acess it by clicking [here](https://worldtrip-hs.vercel.app/).**
+🌐 **This application is live in [Vercel](https://vercel.com/) and you can acess it by clicking [here](https://worldtrip-hs.vercel.app/).**
 
 ## Motivation 💪
 
@@ -116,10 +116,10 @@ This endpoint returns a JSON format object with all continents, countries and ci
 Lets work together! Feel free to contribute on this project.
 
 <p align="center">
-  <img src="https://img.shields.io/github/contributors/heitor-sampaio/worldtrip?style=for-the-badge&color=brightgreen" alt="GitHub project contributors">
+  <img src="https://img.shields.io/github/contributors/heitor-sampaio/worldtrip?style=for-the-badge&color=brightgreen" alt="GitHub project contributors"/>
 </p>
 
-##
+---
 
 <p align="center">
   <img src="readme_assets/hs.png" alt="Heitor Sampaio" width="300" alt="Heitor Sampaio"/>
