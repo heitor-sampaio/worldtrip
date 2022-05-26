@@ -3,6 +3,7 @@ import { GetServerSideProps } from "next";
 import { AiFillFire } from "react-icons/ai";
 
 import CityCard from "../components/CityCard";
+import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { api } from "../services/api";
 
@@ -99,6 +100,8 @@ export default function Continent({ continent }: ContinentProps) {
           </SimpleGrid>
         </Box>
       </Flex>
+
+      <Footer/>
     </Flex>
   )
 }

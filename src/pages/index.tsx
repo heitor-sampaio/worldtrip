@@ -5,6 +5,7 @@ import { api } from "../services/api";
 import Header from "../components/Header";
 import TripType from "../components/TripType";
 import Slider from "../components/Slider";
+import Footer from "../components/Footer";
 
 export default function Home({ continents }) {
   const isWideVersion = useBreakpointValue({
@@ -21,7 +22,7 @@ export default function Home({ continents }) {
   }
 
   return (
-    <Flex direction="column" h="100%">
+    <Flex direction="column" h="100vh">
       <title>World Trip | Planejador de viagens</title>
       <Header/>
       <Flex direction="column">
@@ -46,6 +47,7 @@ export default function Home({ continents }) {
           <Slider continents={continents}/>
         </Flex>
       </Flex>
+      <Footer/>
     </Flex>
   )
 }
