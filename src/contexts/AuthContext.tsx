@@ -18,7 +18,9 @@ export function AuthProvider({ children }) {
 
     console.log(cachedData)
 
-    cachedData.userLoggedIn && setLoggedIn(true);
+    if (cachedData) {
+      cachedData.userLoggedIn && setLoggedIn(true);
+    }
   },[])
 
   async function logIn() {
