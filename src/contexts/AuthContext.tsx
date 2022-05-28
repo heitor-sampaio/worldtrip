@@ -16,17 +16,21 @@ export function AuthProvider({ children }) {
   useEffect(()=>{
     const cachedData = JSON.parse(localStorage.getItem("@worldtrip"))
 
-    cachedData.useLoggedIn && setLoggedIn(true);
+    console.log(cachedData)
+
+    cachedData.userLoggedIn && setLoggedIn(true);
   },[])
 
   async function logIn() {
+    const cachedData = JSON.parse(localStorage.getItem("@worldtrip"))
     setLoggedIn(true);
-    localStorage.setItem("@worldtrip", JSON.stringify({ useLoggedIn: true }))
+    localStorage.setItem("@worldtrip", JSON.stringify({...cachedData, userLoggedIn: true }))
   }
 
   function logOut() {
+    const cachedData = JSON.parse(localStorage.getItem("@worldtrip"))
     setLoggedIn(false);
-    localStorage.setItem("@worldtrip", JSON.stringify({ useLoggedIn: false }))
+    localStorage.setItem("@worldtrip", JSON.stringify({...cachedData, userLoggedIn: false }))
   }
 
   return (
