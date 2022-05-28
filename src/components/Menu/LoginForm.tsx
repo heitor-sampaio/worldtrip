@@ -24,7 +24,7 @@ export default function LoginForm() {
           <InputLeftElement pointerEvents="none">
             <Icon as={FaUser}/>
           </InputLeftElement>
-          <Input placeholder="Password" type={hidePassword ? "password" : "text"}/>
+          <Input placeholder="Senha" type={hidePassword ? "password" : "text"}/>
           <InputRightElement>
             <IconButton icon={<Icon as={hidePassword ? FaEye : FaEyeSlash}/>} aria-label="Tornar senha visível" variant="unstyled" onClick={HandleHidePassword}/>
           </InputRightElement>
