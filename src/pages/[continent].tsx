@@ -5,6 +5,7 @@ import { AiFillFire } from "react-icons/ai";
 import CityCard from "../components/CityCard";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import { useAuth } from "../contexts/AuthContext";
 import { api } from "../services/api";
 
 type Country = {
@@ -36,7 +37,8 @@ interface ContinentProps {
   }
 }
 
-export default function Continent({ continent }: ContinentProps) {
+export default function Continent({ continent }: ContinentProps) { 
+  const { loggedIn } = useAuth();
   const countriesNumber = continent.countries.length;
   const languages = continent.countries.reduce((langs, country) => {
     const countryLanguages = country.languages;
@@ -95,7 +97,7 @@ export default function Continent({ continent }: ContinentProps) {
           </Flex>
           <SimpleGrid spacing={["5","10"]} mb={["5","10"]} minChildWidth="300px" >
             { continent.cities.map(city => (
-              <CityCard key={city.name} cityInfo={city} flagImgUrl={FindCountryFlag(city.country)}/>
+              <CityCard key={city.name} cityInfo={city} flagImgUrl={FindCountryFlag(city.country)} favourite/>
             ))}
           </SimpleGrid>
         </Box>

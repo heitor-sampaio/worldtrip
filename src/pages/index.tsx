@@ -25,6 +25,7 @@ export default function Home({ continents }) {
     <Flex direction="column" h="100vh">
       <title>World Trip | Planejador de viagens</title>
       <Header/>
+      
       <Flex direction="column">
         <Image src={banner} alt="" w="100%" fit="cover"/>
 
@@ -37,7 +38,7 @@ export default function Home({ continents }) {
             <TripType altText="E mais..." tripType="e mais..." />
           </SimpleGrid>
 
-          <Divider w={["60px","150px"]} opacity="1" borderBottomWidth={["2px","4px"]}/>
+          <Divider w={["60px","150px"]} opacity="1" borderBottomWidth={["2px","3px"]}/>
 
           <Flex direction="column" py={["5","52px"]} fontSize={["lg","3xl"]} textAlign="center">
             <Text>Vamos nessa?</Text>

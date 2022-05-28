@@ -1,5 +1,9 @@
-import { Box, Flex, Icon, Image, Link } from "@chakra-ui/react";
+import { Box, Flex, Text, Icon, IconButton, Image, Link, useBreakpointValue, useColorMode } from "@chakra-ui/react";
 import { IoChevronBack } from 'react-icons/io5'
+import { RiMenuLine } from "react-icons/ri";
+import { useAuth } from "../../contexts/AuthContext";
+import { useMenuDrawer } from "../../contexts/MenuDrawerContext";
+import Menu from "../Menu";
 
 interface HeaderProps {
   enableNavigation?: boolean,
@@ -7,6 +11,14 @@ interface HeaderProps {
 }
 
 export default function Header({enableNavigation = false, href}: HeaderProps) {
+  const { onOpen } = useMenuDrawer();
+  const { loggedIn } = useAuth()
+
+  const isWideVersion = useBreakpointValue({
+    base: false,
+    md: true,
+  })
+
   return (
     <Flex
       as="header"
@@ -15,21 +27,31 @@ export default function Header({enableNavigation = false, href}: HeaderProps) {
       mx="auto"
       py={["4","6"]}
       align="center"
-      justify={ enableNavigation ? "space-between" : "center" }
+      justify="space-between"
     >
-      { enableNavigation && (
-        <Link href={href} w={["6","8"]}>
-          <Icon as={IoChevronBack} fontSize={["2xl","4xl"]}/>
-        </Link>
-      )}
+      <Menu logged={loggedIn}/>
+
+      <Flex w="20%" justify="center" align="center">
+        <IconButton
+          display="flex"
+          aria-label="Open navigation"
+          icon={<Icon as={RiMenuLine}/>}
+          fontSize="24"
+          variant="unstyled"
+          onClick={onOpen}
+          alignItems="center"
+        />
+      </Flex>
       
       <Link href="/">
         <Image src="/logo.png" alt="World Trip logo" w={["60%", "100%"]} mx="auto"/>
       </Link>
-      
-      { enableNavigation && (
-        <Box w={["6","8"]}/>
-      )}
+
+      <Flex w="20%" justify="center" align="center">
+        { enableNavigation && (
+          <Link href="/" fontSize={["sm", "md"]}>VOLTAR</Link>
+          )}
+      </Flex>    
     </Flex>
   )
 }

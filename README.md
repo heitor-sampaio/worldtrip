@@ -64,15 +64,17 @@ To provide better code maintainability, this project was built with [TypeScript]
 - Dynamic page building with data fetched from fake API
 - Responsiveness to desktop e mobile platforms
 - Accessibility for screen readers
+- Basic login sistem 🆕
+- Local storage of favourites destinations 🆕
 
 ## Planned features 🧭
 
-- [ ] Improve accessibility
 - [ ] Switch to real API
 - [ ] Account creation
-- [ ] Favorites destinations
-- [ ] Local and cloud storage of favourites destinations
+- [ ] Cloud storage of favourites destinations
 - [ ] Travel plans
+- [ ] Local storage of travel plans
+- [ ] Cloud storage of travel plans
 - [ ] Share travel plans with others users
 - [ ] Destinations and travel plans reviews by other users
 - [ ] Recomended destinations and travels plans based on user's reviews
@@ -110,6 +112,15 @@ yarn dev
 With development server running locally, the API route can be accessed on [http://localhost:3000/api](http://localhost:3000/api/hello).
 
 This endpoint returns a JSON format object with all continents, countries and cities data.
+
+## Updates Log 📝
+
+- **v0.0.1 - 27/05/22 | First commit**
+- **v0.0.2 - 28/08/22 | Added some logged user app features**
+  - Basic login system to enable logged user app features
+  - Basic menu
+  - Set/Unset favourites cities as a logged user app feature
+  - Local browser storage of favourites cities
 
 ## Want to contribute? 🚀
 
