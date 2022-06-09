@@ -25,11 +25,13 @@ export default function CityCard({ cityInfo, flagImgUrl, favourite }: CityCardPr
   useEffect(()=> {
     const cachedData = JSON.parse(localStorage.getItem("@worldtrip"))
 
-    const favouritesCities = cachedData.favouritesCities;
+    if (cachedData) {
+      const favouritesCities = cachedData?.favouritesCities;
 
-    const cityInFavourites = favouritesCities?.find(city => city.name === cityInfo.name)
+      const cityInFavourites = favouritesCities?.find(city => city.name === cityInfo.name)
 
-    cityInFavourites && setIsFavourite(true)
+      cityInFavourites && setIsFavourite(true)
+    }
   },[])
 
   function ToggleFavourite() {

@@ -2,9 +2,9 @@ import { Flex, Link, Text } from "@chakra-ui/react"
 
 interface SlideProps {
   imgUrl: string,
-  title: string,
-  subTitle: string,
-  href: string
+  title?: string,
+  subTitle?: string,
+  href?: string
 }
 
 export default function Slide({ imgUrl, subTitle, title, href }: SlideProps) {  

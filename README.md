@@ -116,7 +116,7 @@ This endpoint returns a JSON format object with all continents, countries and ci
 ## Updates Log 📝
 
 - **v0.0.1 - 27/05/22 | First commit**
-- **v0.0.2 - 28/08/22 | Added some logged user app features**
+- **v0.0.2 - 28/05/22 | Added some logged user app features**
   - Basic login system to enable logged user app features
   - Basic menu
   - Set/Unset favourites cities as a logged user app feature

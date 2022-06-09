@@ -8,30 +8,24 @@ import Profile from "./Profile";
 import { useAuth } from "../../contexts/AuthContext";
 import { useMenuDrawer } from "../../contexts/MenuDrawerContext";
 
-interface MenuProps {
-  logged: boolean
-}
-
-export default function Menu({ logged }: MenuProps) {
+export default function Menu() {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onClose } = useMenuDrawer();
-  const { loggedIn, logIn, logOut } = useAuth();
+  const { loggedIn, logIn, logOut, user } = useAuth();
 
-  const userLogged = loggedIn;
-  
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
       <DrawerOverlay/>
       <DrawerContent>
         <DrawerCloseButton/>
-        { userLogged ? (
+        { loggedIn ? (
           <>
             <DrawerHeader justifyContent="left">
               <Flex>
-                <Profile />
+                <Profile userName={user.exibitionName} />
                 <Flex direction="column" justify="center">
                   <Text fontSize="xs" fontWeight="thin">Bem-vindo(a)</Text>
-                  <Text fontSize="md">Usuário</Text>
+                  <Text fontSize="md">{user.exibitionName}</Text>
                 </Flex>
               </Flex>  
             </DrawerHeader>
@@ -40,7 +34,7 @@ export default function Menu({ logged }: MenuProps) {
             </Flex>
             <DrawerBody>
               <Flex justify="center" align="center" w="70%" h="100%" mx="auto">
-                <Text textAlign="center">Novas funcionalidades estarão disoníveis em breve 😁</Text>
+                <Text textAlign="center">Novas funcionalidades estarão disponíveis em breve 😄</Text>
               </Flex>
               {/* <NavLink  href="/" linkText="Configurações da conta" />
               <NavLink  href="/" linkText="Meus favoritos" />
@@ -65,21 +59,7 @@ export default function Menu({ logged }: MenuProps) {
 
               <LoginForm/>
 
-              <Popover>
-                <PopoverTrigger>
-                  <Link fontSize="sm" href="#">Crie sua conta</Link>
-                </PopoverTrigger>
-                <PopoverContent border="2px" borderColor="gray.500" w="200px" fontSize="sm" bg="highlight.500" color="white">
-                  <PopoverArrow />
-                  <PopoverCloseButton />
-                  <PopoverHeader>
-                    <Text textAlign="center">Em breve!</Text>
-                  </PopoverHeader>
-                  <PopoverBody>
-                    <Text textAlign="center">Por hora, apenas clique no botão de login e você terá acesso à todas as funcionalidades!</Text>
-                  </PopoverBody>
-                </PopoverContent>
-              </Popover>
+              <Link fontSize="sm" href="/users/create">Crie sua conta</Link>  
             </Flex>
           </DrawerBody>
         )}

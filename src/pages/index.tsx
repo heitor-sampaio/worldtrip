@@ -4,7 +4,7 @@ import { api } from "../services/api";
 
 import Header from "../components/Header";
 import TripType from "../components/TripType";
-import Slider from "../components/Slider";
+import { Slider } from "../components/Sliders";
 import Footer from "../components/Footer";
 
 export default function Home({ continents }) {

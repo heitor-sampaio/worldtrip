@@ -14,6 +14,12 @@ type Country = {
   flagImgUrl: string
 }
 
+type Gallery = {
+  imgUrl: string,
+  author: string,
+  likes: number
+}
+
 type City = {
   name: string,
   country: string,
@@ -22,7 +28,8 @@ type City = {
     lat: string,
     long: string
   },
-  top: boolean
+  top: boolean,
+  gallery: Gallery[],
 }
 
 type Continent = {
@@ -39,13 +46,31 @@ interface ContinentProps {
   continents: Continent[]
 }
 
-export default function Slider({ continents }: ContinentProps) {
+interface CityGalleryProps {
+  city: City
+}
+
+export function Slider({ continents }: ContinentProps) {
   return (
     <Box as="section" w="100%" maxW={1240} mb={["","40px"]}>
       <Swiper modules={[Navigation, Pagination]} navigation pagination>
         { continents.map(continent => (
           <SwiperSlide key={continent.slug} title={continent.continentName}>  
             <Slide imgUrl={continent.imgUrl} title={continent.continentName} subTitle={continent.continentShortDescription} href={`/${continent.slug}`}/> 
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </Box>
+  )
+}
+
+export function CityGallerySlider({ city }: CityGalleryProps) {
+  return (
+    <Box as="section" w="100%" maxW={1240} mb={["","40px"]}>
+      <Swiper modules={[Navigation, Pagination]} navigation pagination>
+        { city.gallery.map(image => (
+          <SwiperSlide key={image.imgUrl}>  
+            <Slide imgUrl={image.imgUrl}/> 
           </SwiperSlide>
         ))}
       </Swiper>

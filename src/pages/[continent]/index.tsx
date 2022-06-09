@@ -2,11 +2,11 @@ import { Box, Flex, HStack, Icon, SimpleGrid, Stack, Text } from "@chakra-ui/rea
 import { GetServerSideProps } from "next";
 import { AiFillFire } from "react-icons/ai";
 
-import CityCard from "../components/CityCard";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-import { useAuth } from "../contexts/AuthContext";
-import { api } from "../services/api";
+import CityCard from "../../components/CityCard";
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
+import { useAuth } from "../../contexts/AuthContext";
+import { api } from "../../services/api";
 
 type Country = {
   name: string,

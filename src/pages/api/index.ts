@@ -7,7 +7,7 @@ type Query = {
 }
 
 export default function Continents(req: NextApiRequest, res: NextApiResponse): any {
-  const { continent } = req.query as Query;
+  const { continent, city } = req.query as Query;
   const fakeDbData = getFakeDbData();
 
   let response;
@@ -16,6 +16,14 @@ export default function Continents(req: NextApiRequest, res: NextApiResponse): a
     response = fakeDbData;
   } else {
     response = fakeDbData.find(item => item.slug === continent);
+  }
+
+  if (city) {
+    const foundCity = response.cities.find(item => item.name === city)
+
+    if (foundCity) {
+      response = foundCity;
+    }
   }
 
   if (!response) {
