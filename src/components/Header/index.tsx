@@ -29,7 +29,7 @@ export default function Header({enableNavigation = false, href}: HeaderProps) {
       align="center"
       justify="space-between"
     >
-      <Menu logged={loggedIn}/>
+      <Menu/>
 
       <Flex w="20%" justify="center" align="center">
         <IconButton
