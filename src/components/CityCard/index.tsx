@@ -36,31 +36,41 @@ export default function CityCard({ cityInfo, flagImgUrl, favourite }: CityCardPr
 
   function ToggleFavourite() {
     if (isFavourite) {
-      const cachedData = JSON.parse(localStorage.getItem("@worldtrip"))
-
-      const favouritesCities = cachedData.favouritesCities;
-
-      const updatedFavouritesCities = favouritesCities?.filter(city => city.name !== cityInfo.name)
-
-      const updatedCachedData = {...cachedData, favouritesCities: updatedFavouritesCities}
-
-      localStorage.setItem("@worldtrip", JSON.stringify(updatedCachedData))
-
       setIsFavourite(false)
-    } else {
+
       const cachedData = JSON.parse(localStorage.getItem("@worldtrip"))
 
-      const favouritesCities = cachedData.favouritesCities;
+      if(cachedData) {
+        const favouritesCities = cachedData?.favouritesCities;
+
+        const updatedFavouritesCities = favouritesCities?.filter(city => city.name !== cityInfo.name)
+
+        const updatedCachedData = {...cachedData, favouritesCities: updatedFavouritesCities}
+
+        localStorage.setItem("@worldtrip", JSON.stringify(updatedCachedData))
+      }
+
+      
+    } else {
+      setIsFavourite(true)
+
+      const cachedData = JSON.parse(localStorage.getItem("@worldtrip"))
 
       let updatedFavouritesCities
 
-      favouritesCities ? updatedFavouritesCities = [...favouritesCities, cityInfo] : updatedFavouritesCities = [cityInfo];
+      let updatedCachedData
 
-      const updatedCachedData = {...cachedData, favouritesCities: updatedFavouritesCities}
+      if (cachedData) {
+        const favouritesCities = cachedData.favouritesCities;
 
-      localStorage.setItem("@worldtrip", JSON.stringify(updatedCachedData))
+        favouritesCities ? updatedFavouritesCities = [...favouritesCities, cityInfo] : updatedFavouritesCities = [cityInfo];
 
-      setIsFavourite(true)
+        updatedCachedData = {...cachedData, favouritesCities: updatedFavouritesCities}
+      } else {
+        updatedCachedData = {favouritesCities: updatedFavouritesCities}
+      }
+
+      localStorage.setItem("@worldtrip", JSON.stringify(updatedCachedData))      
     } 
   }
 
