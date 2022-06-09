@@ -31,7 +31,7 @@ export default function CityCard({ cityInfo, flagImgUrl, favourite }: CityCardPr
       const cityInFavourites = favouritesCities?.find(city => city.name === cityInfo.name)
 
       cityInFavourites && setIsFavourite(true)
-    }
+    } 
   },[])
 
   function ToggleFavourite() {
@@ -45,7 +45,7 @@ export default function CityCard({ cityInfo, flagImgUrl, favourite }: CityCardPr
 
         const updatedFavouritesCities = favouritesCities?.filter(city => city.name !== cityInfo.name)
 
-        const updatedCachedData = {...cachedData, favouritesCities: updatedFavouritesCities}
+        const updatedCachedData = {favouritesCities: updatedFavouritesCities}
 
         localStorage.setItem("@worldtrip", JSON.stringify(updatedCachedData))
       }
@@ -67,7 +67,7 @@ export default function CityCard({ cityInfo, flagImgUrl, favourite }: CityCardPr
 
         updatedCachedData = {...cachedData, favouritesCities: updatedFavouritesCities}
       } else {
-        updatedCachedData = {favouritesCities: updatedFavouritesCities}
+        updatedCachedData = {favouritesCities: [cityInfo]}
       }
 
       localStorage.setItem("@worldtrip", JSON.stringify(updatedCachedData))      
