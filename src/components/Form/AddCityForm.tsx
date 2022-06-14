@@ -120,7 +120,7 @@ export default function AddCityForm({continent, countries, onClose}: AddCityForm
   }
 
   return (
-    <Flex as="form" onSubmit={handleSubmit(handleAddCity)}>
+    <Flex as="form" onSubmit={handleSubmit(handleAddCity)} w="100%" justify="center">
       <VStack spacing="5" my="10">
         <Input name="name" label="Nome" error={errors.email} {...register("name")}/>
 
@@ -143,9 +143,9 @@ export default function AddCityForm({continent, countries, onClose}: AddCityForm
           {...register('image')}
         />
 
-        <InputGroup justifyContent="space-around" pt="10">
+        <InputGroup justifyContent="center" pt="5">
           <Button colorScheme="red" onClick={onClose}>Cancelar</Button>
-          <Button type="submit" bg="highlight.500" color="white">Adicionar</Button>
+          <Button type="submit" colorScheme="yellow" color="white" ml="5">Adicionar</Button>
         </InputGroup>
 
       </VStack>
