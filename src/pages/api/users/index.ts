@@ -83,7 +83,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
       const email = decoded.sub
 
-      const response = await fauna.query(
+      const response: any = await fauna.query(
         q.Get(
           q.Match(
             q.Index('user_by_email'),
