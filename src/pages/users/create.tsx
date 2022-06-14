@@ -5,7 +5,7 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from "next/router";
 
-import { Input } from '../../components/Form/Input'
+import { Input } from '../../components/Form/components'
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { api } from "../../services/api";

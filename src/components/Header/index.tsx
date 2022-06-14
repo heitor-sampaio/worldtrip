@@ -12,7 +12,7 @@ interface HeaderProps {
 
 export default function Header({enableNavigation = false, href}: HeaderProps) {
   const { onOpen } = useMenuDrawer();
-  const { loggedIn } = useAuth()
+  const { isAuthenticated } = useAuth()
 
   const isWideVersion = useBreakpointValue({
     base: false,
