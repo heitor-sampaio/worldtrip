@@ -66,8 +66,11 @@ To provide better code maintainability, this project was built with [TypeScript]
 - Responsiveness to desktop e mobile platforms
 - Accessibility for screen readers
 - Local storage of favourites destinations
-- Account creation 🆕
-- User authentication system 🆕
+- Account creation
+- User authentication system
+- Roles and permissions to users actions 🆕
+- Editors now can add cities to continents 🆕
+- Images upload 🆕
 
 ## Planned features 🧭
 
@@ -121,6 +124,12 @@ This endpoint returns a JSON format object with all continents, countries and ci
   - Basic menu
   - Set/Unset favourites cities as a logged user app feature
   - Local browser storage of favourites cities
+- **v0.0.3 - 14/06/22 | New features**
+  - Account creation
+  - Rework on login system
+  - Roles and permissions to users actions
+  - Editors now can add cities to continents
+  - Images upload
 
 ## Want to contribute? 🚀
 
