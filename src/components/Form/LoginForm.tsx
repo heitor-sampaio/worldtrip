@@ -7,7 +7,7 @@ import { HiOutlineLogin } from "react-icons/hi";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { useAuth } from "../../contexts/AuthContext";
 import * as yup from 'yup'
-import { Input } from '../../components/Form/Input'
+import { Input } from '../../components/Form/components'
 
 type LoginFormData = {
   email: string,
@@ -21,7 +21,7 @@ const schema = yup.object().shape({
 
 export default function LoginForm() {
   const { register, handleSubmit, formState: {errors, isSubmitting} }= useForm({ resolver: yupResolver(schema)});
-  const { logIn, loggedIn } = useAuth();
+  const { logIn } = useAuth();
   const [hidePassword, setHidePassword] = useState(true)
 
   function HandleHidePassword() {

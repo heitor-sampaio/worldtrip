@@ -26,7 +26,7 @@ interface CityProps {
 }
 
 export default function City({city}: CityProps) { 
-  const { loggedIn } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [isFavourite, setIsFavourite] = useState(false);
 
   useEffect(()=> {
@@ -79,7 +79,7 @@ export default function City({city}: CityProps) {
       <Flex direction="column" flex="1" w="100%" maxW={1440} p="5" mx="auto">
         <Flex direction="row" justify="start" align="center" pb="4">
           <Text fontSize="4xl">{city.name}</Text>
-          { loggedIn && (
+          { isAuthenticated && (
             <IconButton 
               aria-label="Add city to favourite"
               icon={<Icon as={isFavourite ? AiFillHeart : AiOutlineHeart} fontSize="2xl" color="red.500"/>}

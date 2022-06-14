@@ -1,12 +1,12 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import SetCookie from 'nookies'
+import { createContext, useContext, useEffect, useState } from "react";
+import { destroyCookie, parseCookies, setCookie } from 'nookies'
 
-import { User } from '../types/User'
+import { User } from '../types'
 import { api } from "../services/api";
 
 interface AuthContextProps {
-  loggedIn: boolean;
   user: User | null;
+  isAuthenticated: boolean;
   logIn(user: string, email: string): Promise<boolean>;
   logOut(): void;
 }
@@ -14,54 +14,52 @@ interface AuthContextProps {
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 export function AuthProvider({ children }) {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | undefined>();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  useEffect(()=>{
-    const cachedData = JSON.parse(localStorage.getItem(`@worldtrip:${user?.email}`))
+  async function getUser() {
+    return await api.get('/users').then((response) => response.data)
+  }
 
-    if (cachedData) {
-      cachedData.loggedIn ? setLoggedIn(true) : setLoggedIn(false);
+  useEffect(() => {
+    const { '@worldtrip.token': token } = parseCookies()
+
+    if (token) {
+      setIsAuthenticated(true)
+
+      getUser().then(response => setUser(response))
     }
-
-    // user ? setLoggedIn(true) : setLoggedIn(false)
   },[])
 
   async function logIn(email: string, password: string) {
-    const response = await api.post('/login', {email, password})
+    try {
+      const response = await api.post('/login', {email, password})
 
-    if (response.status === 200) {
-      setLoggedIn(true)
+      if (response.status === 200) {
+        const { user, token } = response.data
 
-      setUser(response.data)
+        setUser(user)
+        setIsAuthenticated(true)
 
-      // SetCookie(undefined, '@worldtrip:token', token, {
-      //   maxAge: 60 * 60 * 24 * 15 // 15 Dias
-      // })
+        setCookie(undefined, '@worldtrip.token', token)
 
-      const cachedData = JSON.parse(localStorage.getItem(`@worldtrip:${email}`))
- 
-      cachedData ? 
-        localStorage.setItem(`@worldtrip:${email}`, JSON.stringify({...cachedData, loggedIn: true })) 
-      :
-        localStorage.setItem(`@worldtrip:${email}`, JSON.stringify({user: response.data, loggedIn: true }))       
-
-      return true
-    } else {
-      return false
+        return true
+      } else {
+        return false
+      }
+    } catch (err) {
+      console.log(err)
     }
   }
 
   function logOut() {
-    setLoggedIn(false);
-
-    const cachedData = JSON.parse(localStorage.getItem(`@worldtrip:${user.email}`))
-
-    localStorage.setItem(`@worldtrip:${user.email}`, JSON.stringify({...cachedData, loggedIn: false }))
+    setIsAuthenticated(false)
+    setUser(undefined)
+    destroyCookie(undefined, '@worldtrip.token')
   }
 
   return (
-    <AuthContext.Provider value={{loggedIn, user, logIn, logOut}}>
+    <AuthContext.Provider value={{user, isAuthenticated, logIn, logOut}}>
       {children}
     </AuthContext.Provider>
   )
