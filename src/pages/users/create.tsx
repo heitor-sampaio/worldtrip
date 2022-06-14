@@ -1,4 +1,4 @@
-import { Box, Button, Flex, HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import { Button, Flex, HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import Link from "next/link"
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -10,7 +10,6 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { api } from "../../services/api";
 import { useAuth } from "../../contexts/AuthContext";
-import { defaultPermissions } from '../../config/permissions'
 
 type CreatUserFormData = {
   name: string;
