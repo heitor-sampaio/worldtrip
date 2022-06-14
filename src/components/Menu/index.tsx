@@ -1,31 +1,33 @@
 import { Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, Flex, Divider, DrawerBody, Switch, Text, useColorMode, Link, Button, DrawerFooter, Icon, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Image } from "@chakra-ui/react";
 import { HiOutlineLogout } from 'react-icons/hi'
 
-import LoginForm from "./LoginForm";
+import LoginForm from "../Form/LoginForm";
 import { NavLink } from "./NavLink";
 import Profile from "./Profile";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { useMenuDrawer } from "../../contexts/MenuDrawerContext";
+import { useEffect } from "react";
+import { api, setupApiClient } from "../../services/api";
 
 export default function Menu() {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onClose } = useMenuDrawer();
-  const { loggedIn, logIn, logOut, user } = useAuth();
+  const { logOut, user } = useAuth();
 
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
       <DrawerOverlay/>
       <DrawerContent>
         <DrawerCloseButton/>
-        { loggedIn ? (
+        { user ? (
           <>
             <DrawerHeader justifyContent="left">
               <Flex>
-                <Profile userName={user.exibitionName} />
+                <Profile userName={ user.exibitionName } />
                 <Flex direction="column" justify="center">
                   <Text fontSize="xs" fontWeight="thin">Bem-vindo(a)</Text>
-                  <Text fontSize="md">{user.exibitionName}</Text>
+                  <Text fontSize="md">{ user.exibitionName }</Text>
                 </Flex>
               </Flex>  
             </DrawerHeader>
@@ -62,8 +64,7 @@ export default function Menu() {
               <Link fontSize="sm" href="/users/create">Crie sua conta</Link>  
             </Flex>
           </DrawerBody>
-        )}
-        
+        )}     
       </DrawerContent>
     </Drawer>
   )

@@ -2,58 +2,43 @@ import { Box, Flex, HStack, Icon, SimpleGrid, Stack, Text } from "@chakra-ui/rea
 import { GetServerSideProps } from "next";
 import { AiFillFire } from "react-icons/ai";
 
+import Header from "../../components/Header";
 import CityCard from "../../components/CityCard";
 import Footer from "../../components/Footer";
-import Header from "../../components/Header";
-import { useAuth } from "../../contexts/AuthContext";
+
 import { api } from "../../services/api";
 
-type Country = {
-  name: string,
-  languages: string[],
-  flagImgUrl: string
-}
-
-type City = {
-  name: string,
-  country: string,
-  cityImgUrl: string,
-  coords: {
-    lat: string,
-    long: string
-  },
-  top: boolean
-}
+import { CountryFormatted, CityFormatted, ContinentFormatted } from '../../types'
+import { useAuth } from "../../contexts/AuthContext";
+import { AddCityModal } from "../../components/Modals/AddCityModal";
 
 interface ContinentProps {
-  continent: {
-    slug: string,
-    continentName: string,
-    continentShortDescription: string,
-    continentFullDescription: string,
-    imgUrl: string,
-    countries: Country[],
-    cities: City[],
-  }
+  continentData: ContinentFormatted,
+  countriesData: CountryFormatted[],
+  citiesData: CityFormatted[]
 }
 
-export default function Continent({ continent }: ContinentProps) { 
-  const { loggedIn } = useAuth();
-  const countriesNumber = continent.countries.length;
-  const languages = continent.countries.reduce((langs, country) => {
+export default function Continent({ continentData: continent, countriesData: countries, citiesData: cities }: ContinentProps) { 
+  const { user } = useAuth()
+  
+  const countriesNumber = countries?.length;
+
+  const languages = countries.reduce((langs, country) => {
     const countryLanguages = country.languages;
 
     countryLanguages.forEach(language => { !langs.includes(language) && langs.push(language) })
 
     return langs;
   }, [])
+
   const languagesNumber = languages.length;
-  const citiesNumber = continent.cities.length;
 
-  function FindCountryFlag(countryName: string): string {
-    const response = continent.countries.find(country => country.name === countryName);
+  const citiesNumber = cities.length;
 
-    return response.flagImgUrl;
+  function FindCountryByCity(city: CityFormatted): CountryFormatted {
+    const country = countries.find(country => country.id === city.countryRef)
+
+    return country
   }
 
   return (
@@ -73,11 +58,11 @@ export default function Continent({ continent }: ContinentProps) {
           
           <HStack justifyContent="center" spacing={["10","20"]} h="100%" w="100%" maxW={["100%","50%"]}>
             <Box flexDirection="column" textAlign="center" alignItems="center" justifyContent="center" fontWeight="semibold">
-              <Text fontSize={["4xl","8xl"]} lineHeight="none" color="highlight.500">{countriesNumber}</Text>
+              <Text fontSize={["4xl","8xl"]} lineHeight="none" color="highlight.500">1</Text>
               <Text fontSize={["md","2xl"]}>país{countriesNumber > 1 && ("es")}</Text>
             </Box>
             <Box flexDirection="column" textAlign="center" alignItems="center" justifyContent="center" fontWeight="semibold">
-              <Text fontSize={["4xl","8xl"]} lineHeight="none" color="highlight.500">{languagesNumber}</Text>
+              <Text fontSize={["4xl","8xl"]} lineHeight="none" color="highlight.500">2</Text>
               <Text fontSize={["md","2xl"]}>língua{languagesNumber > 1 && ("s")}</Text>
             </Box>
             <Box flexDirection="column" textAlign="center" alignItems="center" justifyContent="center" fontWeight="semibold">
@@ -89,16 +74,24 @@ export default function Continent({ continent }: ContinentProps) {
 
         <Box as="section">
           <Flex direction={["column","row"]} pb={["2", "10"]}>
-            <Text fontSize={["2xl","4xl"]}>Cidade{citiesNumber > 1 && ("s")} disponíve{citiesNumber > 1 ? ("is") : ("l")}</Text>
+            <Flex direction="row">
+              <Text fontSize={["2xl","4xl"]}>Cidade{citiesNumber > 1 && ("s")} disponíve{citiesNumber > 1 ? ("is") : ("l")}</Text>
+              
+              { user?.permissions.cities.create && <AddCityModal continent={continent} countries={countries}/> }
+            </Flex>
+            
             <Flex direction="row" ml={["0","auto"]} align="center">
               <Icon as={AiFillFire} fontSize={["lg","3xl"]} color="red.500"/>
               <Text fontSize={["sm","xl"]}>Destinos mais procurados</Text>
             </Flex>
           </Flex>
           <SimpleGrid spacing={["5","10"]} mb={["5","10"]} minChildWidth="300px" >
-            { continent.cities.map(city => (
-              <CityCard key={city.name} cityInfo={city} flagImgUrl={FindCountryFlag(city.country)} favourite/>
-            ))}
+            { cities.map((city: CityFormatted) => {
+              const cityCountry = FindCountryByCity(city)
+              return (
+                <CityCard key={city.name} cityInfo={city} country={cityCountry} favourite/>
+              )})
+            }
           </SimpleGrid>
         </Box>
       </Flex>
@@ -112,9 +105,9 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const { continent } = params;
   const slug = String(continent);
 
-  const response = await api.get("/", { params: { continent: slug } }).then(response => (response.data))
+  const response = await api.get("/continents", { params: { continent: slug } }).then(response => (response.data))
 
   return {
-    props: { continent: response }
+    props: { continentData: response.continent, countriesData: response.countries, citiesData: response.cities }
   }
 }

@@ -55,7 +55,8 @@ Next.js is a ReactJS framework that allows serveless applications building.
 
 ChakraUI is a ReactJS component library that represent the future of interface building, allowing to build well-designed, responsive and acessible user interfaces with ease.
 
-I also used [Axios](https://axios-http.com/) as HTTP client to consume a **fake API with static database** to provide continents, countries and cities data to dynamically show continents and cities infos on pages.
+I also used [Axios](https://axios-http.com/) as HTTP client to consume a **Next API** to provide continents, countries and cities data to dynamically show continents and cities infos on pages.
+All the data is stored in a [Fauna](https://fauna.com/) database.
 
 To provide better code maintainability, this project was built with [TypeScript](https://www.typescriptlang.org/).
 
@@ -64,13 +65,12 @@ To provide better code maintainability, this project was built with [TypeScript]
 - Dynamic page building with data fetched from fake API
 - Responsiveness to desktop e mobile platforms
 - Accessibility for screen readers
-- Basic login sistem 🆕
-- Local storage of favourites destinations 🆕
+- Local storage of favourites destinations
+- Account creation 🆕
+- User authentication system 🆕
 
 ## Planned features 🧭
 
-- [ ] Switch to real API
-- [ ] Account creation
 - [ ] Cloud storage of favourites destinations
 - [ ] Travel plans
 - [ ] Local storage of travel plans

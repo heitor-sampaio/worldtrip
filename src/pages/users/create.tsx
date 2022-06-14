@@ -10,6 +10,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { api } from "../../services/api";
 import { useAuth } from "../../contexts/AuthContext";
+import { defaultPermissions } from '../../config/permissions'
 
 type CreatUserFormData = {
   name: string;
@@ -40,28 +41,10 @@ export default function CreateUser() {
     const fullName = name.split(" ")
     
     const exibitionName = `${fullName[0]} ${fullName.pop()}` 
-
-    const roles = ["traveller"]
     
-    const response = await api.post("/users", {email, password, fullName: name, exibitionName, roles})
+    const response = await api.post("/users", {email, password, fullName: name, exibitionName})
 
     if (response.status === 200) {
-      const cachedData = JSON.parse(localStorage.getItem("@worldtrip"))
-      
-      const loggedIn = true
-      
-      const user = {exibitionName, email, roles}
-
-      if (cachedData) {
-        const updatedCachedData = {...cachedData, loggedIn, user}
-
-        localStorage.setItem(`@worldtrip:${email}`, JSON.stringify(updatedCachedData))
-      } else {
-        const newCachedData = { user, loggedIn}
-
-        localStorage.setItem(`@worldtrip:${email}`, JSON.stringify(newCachedData))
-      }
-
       logIn(email, password)
 
       router.push("/");

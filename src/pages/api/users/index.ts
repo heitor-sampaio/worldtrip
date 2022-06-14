@@ -1,16 +1,28 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { query as q } from 'faunadb'
 import { NextApiRequest, NextApiResponse } from 'next';
-import { useAuth } from '../../../contexts/AuthContext';
+import decode from 'jwt-decode'
+import { v4 as uuid } from 'uuid'
 
 import { fauna } from "../../../services/fauna";
+import { defaultPermissions } from '../../../config/permissions';
+import { DecodedToken } from '../../../types';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
-    const {email, password, fullName, exibitionName, roles} = req.body;
+    const {email, password, fullName, exibitionName} = req.body;
+    const id = uuid()
+    const role = ['user']
+    const permissions = defaultPermissions
+    const favourites = {
+      cities: [],
+      attatractions: [],
+      travelPlans: []
+    }
+    const likes = 0    
 
     try {
-      await fauna.query(
+      const createdUser = await fauna.query(
         q.If(
           q.Not(
             q.Exists(
@@ -23,11 +35,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           q.Create(
             q.Collection('users'),
             {data : {
+              id,
               email,
               password,
               fullName,
               exibitionName,
-              roles
+              role,
+              permissions,
+              favourites,
+              likes
             }}
           ),
           q.Get(
@@ -37,16 +53,54 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             )
           )
         )
-      )
+      ).then((res) => res)
 
-      return res.status(200).json({createdUser: { email, password, fullName }})
+      return res.status(200).json({createdUser: { email, password, fullName, role, permissions }})
     } catch (error) {
       return res.status(500).json({ error })
     }
   }
 
-  if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST')
-    res.status(405).end('Method not allow')
+  if (req.method === 'GET') {
+    try {
+      const { authorization } = req.headers
+
+      if (!authorization) {
+        return res
+          .status(401)
+          .json({ error: true, code: 'token.invalid', message: 'Token not present.' })
+      }
+
+      const [, token] = authorization?.split(' ');
+
+      if (!token) {
+        return res 
+          .status(401)
+          .json({ error: true, code: 'token.invalid', message: 'Token not present.' })
+      }
+
+      const decoded = decode(token as string) as DecodedToken;
+
+      const email = decoded.sub
+
+      const response = await fauna.query(
+        q.Get(
+          q.Match(
+            q.Index('user_by_email'),
+            q.Casefold(email)
+          )
+        )
+      )
+
+      const user = response.data
+
+      delete user.password
+
+      return res.status(200).json(user)
+    } catch {
+      return res.status(404).json({error: 'User not found'})
+    }
   }
+
+  return res.status(405).end('Method not allow')
 }
