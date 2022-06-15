@@ -37,8 +37,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(401).json({ error: "Wrong email/password"})
       }
     } catch (error) {
-      console.log(error)
-
       return res.status(500).json({ error })
     }
   }

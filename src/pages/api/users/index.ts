@@ -12,7 +12,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
     const {email, password, fullName, exibitionName} = req.body;
     const id = uuid()
-    const role = ['user']
+    const roles = ['user']
     const permissions = defaultPermissions
     const favourites = {
       cities: [],
@@ -40,7 +40,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               password,
               fullName,
               exibitionName,
-              role,
+              roles,
               permissions,
               favourites,
               likes
@@ -55,7 +55,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         )
       ).then((res) => res)
 
-      return res.status(200).json({createdUser: { email, password, fullName, role, permissions }})
+      return res.status(200).json({createdUser: { email, password, fullName, roles, permissions }})
     } catch (error) {
       return res.status(500).json({ error })
     }

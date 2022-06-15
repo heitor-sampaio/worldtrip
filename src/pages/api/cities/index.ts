@@ -30,7 +30,7 @@ export default async function citiesHandler(req: NextApiRequest, res: NextApiRes
     const slug = name.replace(/\s/g, '-').toLowerCase()
 
     try {
-      await fauna.query(
+      const data = await fauna.query(
         q.Let(
           {
             continent: q.Get(q.Match(q.Index("continent_by_id"),continentRef)
@@ -70,7 +70,7 @@ export default async function citiesHandler(req: NextApiRequest, res: NextApiRes
         )
       )
 
-      return res.status(200).json({ success: true })
+      return res.status(201).json({ success: true })
     } catch(err) {
       return res.status(501).json({ error: `Sorry something Happened! ${err.message}` })
     }

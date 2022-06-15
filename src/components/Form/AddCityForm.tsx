@@ -55,7 +55,7 @@ export default function AddCityForm({continent, countries, onClose}: AddCityForm
 
       const imageData = await api.post('/images', {url: imageUrl, owner: user.id})
 
-      if (imageData.status !== 200) {
+      if (imageData.status !== 201) {
         throw new Error()
       }
 
@@ -63,7 +63,7 @@ export default function AddCityForm({continent, countries, onClose}: AddCityForm
 
       let addedBy = {}
 
-      if ( user.roles.includes('team')) {
+      if ( user.roles.includes('team') ) {
         addedBy = {
           id: undefined,
           name: 'WorldTrip Team'
@@ -85,8 +85,7 @@ export default function AddCityForm({continent, countries, onClose}: AddCityForm
       
       const cityData = await api.post('/cities', newCity)
 
-      if (cityData.status !== 200) {
-        console.log(cityData)
+      if (cityData.status !== 201) {
         throw new Error()
       }
 
