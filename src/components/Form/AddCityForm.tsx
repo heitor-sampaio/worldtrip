@@ -122,7 +122,7 @@ export default function AddCityForm({continent, countries, onClose}: AddCityForm
   return (
     <Flex as="form" onSubmit={handleSubmit(handleAddCity)} w="100%" justify="center">
       <VStack spacing="5" my="10">
-        <Input name="name" label="Nome" error={errors.email} {...register("name")}/>
+        <Input type="text" name="name" label="Nome" error={errors.email} {...register("name")}/>
 
         <Select placeholder="Escolha o país" label="País" error={errors.email} {...register("country")}>
           { countries.map(country => {
