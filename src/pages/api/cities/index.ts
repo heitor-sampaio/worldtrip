@@ -33,18 +33,13 @@ export default async function citiesHandler(req: NextApiRequest, res: NextApiRes
       await fauna.query(
         q.Let(
           {
-            continent: q.Get(
-              q.Match(
-                q.Index("continent_by_id"),
-                continentRef
-              )
+            continent: q.Get(q.Match(q.Index("continent_by_id"),continentRef)
             ),
             continentRef: q.Select(["ref"], q.Var("continent")),
             continentCitiesRefs: q.Select(["data", "citiesRefs"], q.Var("continent")),
             updatedContinentCitiesRefs: q.Append(id, q.Var("continentCitiesRefs")),
-            country: q.Get(
-              q.Match(q.Index("country_by_id"), countryRef)
-            ),
+
+            country: q.Get(q.Match(q.Index("country_by_id"), countryRef)),
             countryRef: q.Select(["ref"], q.Var("country")),
             countryCitiesRefs: q.Select(["data", "citiesRefs"], q.Var("country")),
             updatedCountryCitiesRefs: q.Append(id, q.Var("countryCitiesRefs"))
@@ -75,7 +70,7 @@ export default async function citiesHandler(req: NextApiRequest, res: NextApiRes
         )
       )
 
-      return res.status(200).json({ success: true})
+      return res.status(200).json({ success: true })
     } catch(err) {
       return res.status(501).json({ error: `Sorry something Happened! ${err.message}` })
     }

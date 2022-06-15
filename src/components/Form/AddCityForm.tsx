@@ -61,17 +61,17 @@ export default function AddCityForm({continent, countries, onClose}: AddCityForm
 
       const { name, country } = data;
 
-      let addedBy
+      let addedBy = {}
 
       if ( user.roles.includes('team')) {
-        addedBy: {
-          id: undefined;
-          name: 'WorldTrip Team';
+        addedBy = {
+          id: undefined,
+          name: 'WorldTrip Team'
         }
       } else {
-        addedBy: {
-          id: user.id;
-          name: user.exibitionName;
+        addedBy = {
+          id: user.id,
+          name: user.exibitionName
         }
       }
 
