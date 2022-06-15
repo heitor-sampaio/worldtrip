@@ -1,9 +1,11 @@
-import { Button, Flex, FormControl, FormErrorMessage, FormLabel, IconButton, Input as ChakraInput, InputProps as ChakraInputProps, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger } from "@chakra-ui/react";
-import { forwardRef, ForwardRefRenderFunction } from "react";
+/* eslint-disable react/no-children-prop */
+import { Flex, FormControl, FormErrorMessage, FormLabel, Input as ChakraInput, InputGroup, InputLeftElement, InputProps as ChakraInputProps, InputRightElement } from "@chakra-ui/react";
+import { forwardRef, ForwardRefRenderFunction, ReactNode } from "react";
 import { FieldError } from "react-hook-form";
 import { HelpTooltip } from "../../Tooltips";
 
 interface InputProps extends ChakraInputProps {
+  type: string,
   name: string,
   label?: string,
   tooltip?: {
@@ -11,9 +13,17 @@ interface InputProps extends ChakraInputProps {
     tip: string,
   },
   error?: FieldError,
+  leftIcon?: {
+    icon: ReactNode,
+    interactive?: boolean
+  } 
+  rightIcon?: {
+    icon: ReactNode,
+    interactive?: boolean,
+  } 
 }
 
-const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({ name, label, tooltip, error = null, ...rest }, ref) => {
+const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({ type, name, label, tooltip, error = null, leftIcon, rightIcon, ...rest }, ref) => {
   error && console.log(error)
   return (
     <FormControl isInvalid={!!error}>
@@ -21,15 +31,21 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({ nam
         {!!label && <FormLabel htmlFor={name}>{label}</FormLabel>}
         {!!tooltip && <HelpTooltip title={tooltip.title} tip={tooltip.tip}/>}
       </Flex>
-      <ChakraInput
-        name={name}
-        id={name}
-        focusBorderColor="highlight.500"
-        variant="outline"
-        _hover={{ bgColor: 'gray.50' }}
-        ref={ref}
-        {...rest}
-      />
+      <InputGroup>
+        { leftIcon && <InputLeftElement pointerEvents={leftIcon.interactive ? "auto" : "none"} children={leftIcon.icon}/> }
+        <ChakraInput
+          name={name}
+          id={name}
+          type={type}
+          focusBorderColor="highlight.500"
+          errorBorderColor='red.300'
+          variant="outline"
+          _hover={{ bgColor: 'gray.50' }}
+          ref={ref}
+          {...rest}
+        />
+        { rightIcon && <InputRightElement pointerEvents={rightIcon.interactive ? "auto" : "none"} children={rightIcon.icon}/> }
+      </InputGroup>
       { !!error && (<FormErrorMessage>{error.message}</FormErrorMessage>) }
     </FormControl>
   )

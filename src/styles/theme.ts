@@ -29,6 +29,6 @@ export const theme = extendTheme({
         bg: '#F5F8FA',
         color: 'gray.600',
       }
-    }
-  }
+    },
+  },
 })

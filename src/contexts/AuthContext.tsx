@@ -3,6 +3,7 @@ import { destroyCookie, parseCookies, setCookie } from 'nookies'
 
 import { User } from '../types'
 import { api } from "../services/api";
+import { Toast, useToast } from "@chakra-ui/react";
 
 interface AuthContextProps {
   user: User | null;
@@ -16,6 +17,7 @@ const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState<User | undefined>();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const toast = useToast()
 
   async function getUser() {
     return await api.get('/users').then((response) => response.data)
@@ -48,7 +50,15 @@ export function AuthProvider({ children }) {
         throw new Error()
       }
     } catch (err) {
-      console.log(err)
+      toast({
+        title: 'Falha no login',
+        description:
+          'E-mail ou senha inválidos, por favor, revise suas credenciais.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      });
     }
   }
 

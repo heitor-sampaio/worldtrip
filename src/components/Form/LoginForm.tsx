@@ -1,13 +1,15 @@
-import { FormControl, VStack, InputGroup, InputLeftElement, Icon, Text, InputRightElement, IconButton, Button, Flex } from "@chakra-ui/react";
+/* eslint-disable react/no-children-prop */
+import { VStack, InputGroup, InputLeftElement, Icon, Text, InputRightElement, IconButton, Button, Flex } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { HiOutlineLogin } from "react-icons/hi";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { useAuth } from "../../contexts/AuthContext";
 import * as yup from 'yup'
 import { Input } from '../../components/Form/components'
+import { RiLockPasswordLine } from "react-icons/ri";
 
 type LoginFormData = {
   email: string,
@@ -20,7 +22,7 @@ const schema = yup.object().shape({
 })
 
 export default function LoginForm() {
-  const { register, handleSubmit, formState: {errors, isSubmitting} }= useForm({ resolver: yupResolver(schema)});
+  const { register, handleSubmit, formState: {errors, isSubmitting} } = useForm({resolver: yupResolver(schema)});
   const { logIn } = useAuth();
   const [hidePassword, setHidePassword] = useState(true)
 
@@ -31,28 +33,39 @@ export default function LoginForm() {
   const handleLogin: SubmitHandler<LoginFormData> = async (data, event) => {
     const { email, password } = data;
 
-    logIn(email, password);
+    await logIn(email, password);
   }
 
   return (
     <Flex as="form" onSubmit={handleSubmit(handleLogin)}>
       <VStack spacing="5" my="10">
-        <InputGroup>
-          <InputLeftElement pointerEvents="none"><Icon as={MdOutlineAlternateEmail}/></InputLeftElement>
-          <Input name="email" type="text" label="E-mail" error={errors.email} {...register("email")}/>
-        </InputGroup>
-        <InputGroup>
-          <InputLeftElement pointerEvents="none">
-            <Icon as={FaUser}/>
-          </InputLeftElement>
-          <Input name="password" type={hidePassword ? "password" : "text"} label="Senha" error={errors.password} {...register("password")}/>
-          <InputRightElement>
-            <IconButton icon={<Icon as={hidePassword ? FaEye : FaEyeSlash}/>} aria-label="Tornar senha visível" variant="unstyled" onClick={HandleHidePassword}/>
-          </InputRightElement>
-        </InputGroup>
-        <Button type="submit" rightIcon={<Icon as={HiOutlineLogin}/>} my="4" bg="highlight.500" variant="solid" color="white" isLoading={isSubmitting}>
+        <Input name="email" type="text" label="E-mail" error={errors.email} leftIcon={{icon: <MdOutlineAlternateEmail />}} {...register("email")}/>
+
+        <Input 
+          name="password"
+          type={hidePassword ? "password" : "text"}
+          label="Senha" 
+          error={errors.password}
+          leftIcon={{icon: <RiLockPasswordLine />}} 
+          rightIcon={
+            {icon: 
+              <IconButton 
+                icon={<Icon as={hidePassword ? FaEye : FaEyeSlash}/>}
+                aria-label="Tornar senha visível"
+                variant="unstyled"
+                onClick={HandleHidePassword}
+                display="flex"
+              />,
+              interactive: true
+            }
+          }
+          {...register("password")}
+        />
+
+        <Button type="submit" rightIcon={<Icon as={HiOutlineLogin}/>} my="4" colorScheme="yellow" variant="solid" color="white" isLoading={isSubmitting} loadingText='Logando...'>
           <Text>Login</Text>
         </Button>
+        
       </VStack>
     </Flex>
   )
