@@ -55,7 +55,7 @@ export default function AddCityForm({continent, countries, onClose}: AddCityForm
 
       const imageData = await api.post('/images', {url: imageUrl, owner: user.id})
 
-      if (imageData.status !== 201) {
+      if (imageData.status !== 200) {
         throw new Error()
       }
 
@@ -86,6 +86,7 @@ export default function AddCityForm({continent, countries, onClose}: AddCityForm
       const cityData = await api.post('/cities', newCity)
 
       if (cityData.status !== 200) {
+        console.log(cityData)
         throw new Error()
       }
 
