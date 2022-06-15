@@ -61,17 +61,17 @@ export default function AddCityForm({continent, countries, onClose}: AddCityForm
 
       const { name, country } = data;
 
-      let addedBy
+      let addedBy = {}
 
-      if ( user.roles.includes('team')) {
-        addedBy: {
-          id: undefined;
-          name: 'WorldTrip Team';
+      if ( user.roles.includes('team') ) {
+        addedBy = {
+          id: undefined,
+          name: 'WorldTrip Team'
         }
       } else {
-        addedBy: {
-          id: user.id;
-          name: user.exibitionName;
+        addedBy = {
+          id: user.id,
+          name: user.exibitionName
         }
       }
 
@@ -85,7 +85,7 @@ export default function AddCityForm({continent, countries, onClose}: AddCityForm
       
       const cityData = await api.post('/cities', newCity)
 
-      if (cityData.status !== 200) {
+      if (cityData.status !== 201) {
         throw new Error()
       }
 

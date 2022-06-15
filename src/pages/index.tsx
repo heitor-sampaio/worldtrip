@@ -55,9 +55,7 @@ export default function Home({ continents }) {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const continents = await api.get("/continents").then(response => (response.data));
-
-  console.log(continents)
-
+  
   return {
     props: { continents },
   }

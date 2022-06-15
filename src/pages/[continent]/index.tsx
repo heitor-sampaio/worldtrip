@@ -1,4 +1,4 @@
-import { Box, Flex, HStack, Icon, SimpleGrid, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, HStack, Icon, SimpleGrid, Stack, Text, VStack } from "@chakra-ui/react";
 import { GetServerSideProps } from "next";
 import { AiFillFire } from "react-icons/ai";
 
@@ -14,8 +14,8 @@ import { AddCityModal } from "../../components/Modals/AddCityModal";
 
 interface ContinentProps {
   continentData: ContinentFormatted,
-  countriesData: CountryFormatted[],
-  citiesData: CityFormatted[]
+  countriesData?: CountryFormatted[],
+  citiesData?: CityFormatted[]
 }
 
 export default function Continent({ continentData: continent, countriesData: countries, citiesData: cities }: ContinentProps) { 
@@ -42,7 +42,7 @@ export default function Continent({ continentData: continent, countriesData: cou
   }
 
   return (
-    <Flex direction="column" h="100%">
+    <Flex direction="column" h="100%" minH="100vh">
       <title>World Trip | Planejador de viagens</title>
       <Header enableNavigation href="/"/>
 
@@ -58,11 +58,11 @@ export default function Continent({ continentData: continent, countriesData: cou
           
           <HStack justifyContent="center" spacing={["10","20"]} h="100%" w="100%" maxW={["100%","50%"]}>
             <Box flexDirection="column" textAlign="center" alignItems="center" justifyContent="center" fontWeight="semibold">
-              <Text fontSize={["4xl","8xl"]} lineHeight="none" color="highlight.500">1</Text>
+              <Text fontSize={["4xl","8xl"]} lineHeight="none" color="highlight.500">{countriesNumber}</Text>
               <Text fontSize={["md","2xl"]}>país{countriesNumber > 1 && ("es")}</Text>
             </Box>
             <Box flexDirection="column" textAlign="center" alignItems="center" justifyContent="center" fontWeight="semibold">
-              <Text fontSize={["4xl","8xl"]} lineHeight="none" color="highlight.500">2</Text>
+              <Text fontSize={["4xl","8xl"]} lineHeight="none" color="highlight.500">{languagesNumber}</Text>
               <Text fontSize={["md","2xl"]}>língua{languagesNumber > 1 && ("s")}</Text>
             </Box>
             <Box flexDirection="column" textAlign="center" alignItems="center" justifyContent="center" fontWeight="semibold">
@@ -72,28 +72,36 @@ export default function Continent({ continentData: continent, countriesData: cou
           </HStack>
         </Stack>
 
-        <Box as="section">
-          <Flex direction={["column","row"]} pb={["2", "10"]}>
-            <Flex direction="row">
-              <Text fontSize={["2xl","4xl"]}>Cidade{citiesNumber > 1 && ("s")} disponíve{citiesNumber > 1 ? ("is") : ("l")}</Text>
+        { citiesNumber > 0 ?
+          <Box as="section">
+            <Flex direction={["column","row"]} pb={["2", "10"]}>
+              <Flex direction="row">
+                <Text fontSize={["2xl","4xl"]}>Cidade{citiesNumber > 1 && ("s")} disponíve{citiesNumber > 1 ? ("is") : ("l")}</Text>
+                
+                { user?.permissions.cities.create && <AddCityModal continent={continent} countries={countries}/> }
+              </Flex>
               
-              { user?.permissions.cities.create && <AddCityModal continent={continent} countries={countries}/> }
+              <Flex direction="row" ml={["0","auto"]} align="center">
+                <Icon as={AiFillFire} fontSize={["lg","3xl"]} color="red.500"/>
+                <Text fontSize={["sm","xl"]}>Destinos mais procurados</Text>
+              </Flex>
             </Flex>
-            
-            <Flex direction="row" ml={["0","auto"]} align="center">
-              <Icon as={AiFillFire} fontSize={["lg","3xl"]} color="red.500"/>
-              <Text fontSize={["sm","xl"]}>Destinos mais procurados</Text>
-            </Flex>
-          </Flex>
-          <SimpleGrid spacing={["5","10"]} mb={["5","10"]} minChildWidth="300px" >
-            { cities.map((city: CityFormatted) => {
-              const cityCountry = FindCountryByCity(city)
-              return (
-                <CityCard key={city.name} cityInfo={city} country={cityCountry} favourite/>
-              )})
-            }
-          </SimpleGrid>
-        </Box>
+            <SimpleGrid spacing={["5","10"]} mb={["5","10"]} minChildWidth="300px" >
+              { cities.map((city: CityFormatted) => {
+                const cityCountry = FindCountryByCity(city)
+                return (
+                  <CityCard key={city.name} cityInfo={city} country={cityCountry} favourite/>
+                )})
+              }
+            </SimpleGrid>
+          </Box>
+          :
+          <VStack spacing="5" direction="column" justify="center" align="center" color="gray.300" textAlign="center" mt="10">
+            <Text>Sentimos muito!</Text>
+            <Text>Infelizmente este continente não possui nenhum destino cadastrado!</Text>
+            <Text>Solicite um cargo de editor e comece a adicionar seus destinos favoritos!</Text>
+          </VStack>
+        }
       </Flex>
 
       <Footer/>

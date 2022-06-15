@@ -45,7 +45,7 @@ export function AuthProvider({ children }) {
 
         return true
       } else {
-        return false
+        throw new Error()
       }
     } catch (err) {
       console.log(err)
