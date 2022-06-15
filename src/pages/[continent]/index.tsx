@@ -46,13 +46,13 @@ export default function Continent({ continentData: continent, countriesData: cou
       <title>World Trip | Planejador de viagens</title>
       <Header enableNavigation href="/"/>
 
-      <Flex bgImage={continent.imgUrl} bgPosition="center" bgRepeat="no-repeat" bgSize="cover" w="100%"  direction="row">
+      <Flex bgImage={continent.imgUrl} bgPosition="center" bgRepeat="no-repeat" bgSize="cover" w="100%"  direction="column" px="5">
         <Flex w="100%" maxW={1440} h={["175px", "450px"]} mx="auto" py={["","60px"]} alignItems={["center","end"]} justifyContent={["center","flex-start"]} color="white">
-          <Text fontSize={["xl","6xl"]} fontWeight="bold">{continent.continentName}</Text>
+          <Text fontSize={["3xl","6xl"]} fontWeight="bold" wordBreak={"break-word"}>{continent.continentName}</Text>
         </Flex>
       </Flex>
 
-      <Flex w={["90%","100%"]} maxW={1440} h="100%" mx="auto" direction="column">
+      <Flex w={["90%","100%"]} maxW={1440} h="100%" mx="auto" direction="column" px={["0","5"]}>
         <Stack as="section" direction={["column","row"]} spacing={["5","0"]} py={["5","80px"]} align="center">
           <Text fontSize={["sm","2xl"]} w="100%" maxW={["100%","50%"]} textAlign="justify">{continent.continentFullDescription}</Text>
           
