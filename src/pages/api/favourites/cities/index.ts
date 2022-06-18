@@ -5,6 +5,7 @@ import { fauna } from "../../../../services/fauna";
 import { query as q } from 'faunadb'
 import { User } from '../../../../types';
 import { api } from '../../../../services/api';
+import * as jose from 'jose'
 
 const cors = initMiddleware(
   Cors({
@@ -15,22 +16,26 @@ const cors = initMiddleware(
 export default async function favourtitesCitiesHandler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   await cors(req, res);
 
-  const userId = res.getHeader('user') as string
+  const token = req.cookies['@worldtrip.token']
 
-  const headers = req.headers
+  const secret = process.env.JWT_SECRET
 
-  console.log(headers)
+  const { payload } = await jose.jwtVerify(
+    token,
+    new TextEncoder().encode(secret)
+  )
+
+  const user = payload.user as User
 
   res.removeHeader('user')
 
   if (req.method === 'PUT') {
     const { cityId } = req.body;
-
     try {
       await fauna.query(
         q.Let(
           {
-            user: q.Get(q.Match(q.Index("user_by_id"), userId)),
+            user: q.Get(q.Match(q.Index("user_by_id"), user.id)),
             userRef: q.Select(['ref'], q.Var('user')),
             city: q.ToString(cityId),
             favouritesCities: q.Select(["data", "favourites", "cities"], q.Var("user")),
