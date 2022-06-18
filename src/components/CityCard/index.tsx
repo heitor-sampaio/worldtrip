@@ -1,48 +1,76 @@
-import { Box, Flex, Icon, IconButton, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Icon, IconButton, Image, Text, useToast } from "@chakra-ui/react";
+import { parseCookies } from "nookies";
 import { useEffect, useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai"
 import { useAuth } from "../../contexts/AuthContext";
-import { CityFormatted, CountryFormatted } from "../../types";
+import { api } from "../../services/api";
+import { CityFormatted, CountryFormatted, Token, User } from "../../types";
+import decode from 'jwt-decode'
+import { GetServerSideProps } from "next";
 
 interface CityCardProps {
   cityInfo: CityFormatted,
   country: CountryFormatted,
-  favourite: boolean
+  favourite?: boolean
 }
 
-export default function CityCard({ cityInfo, country, favourite }: CityCardProps) {
+export default function CityCard({ cityInfo: city, country, favourite}: CityCardProps) {
   const { isAuthenticated, user } = useAuth();
-  const [isFavourite, setIsFavourite] = useState(false);
+  const [isFavourite, setIsFavourite] = useState(favourite);
+  const toast = useToast()
 
-  useEffect(()=> {
-    const cachedData = JSON.parse(localStorage.getItem("@worldtrip"))
+  async function ToggleFavourite() {
+    try {
+      if (!user) {
+        toast({
+          title: 'Ops! Algo não aconteceu como o esperado!',
+          description:
+            'Sincronizando usuário',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+          position: 'top'
+        });
+        return
+      }
 
-    if (cachedData) {
-      const favouritesCities = cachedData?.favouritesCities;
+      if (isFavourite) { 
+        setIsFavourite(false)
+      } else {
+        setIsFavourite(true)    
+      }
 
-      const cityInFavourites = favouritesCities?.find((city: CityFormatted) => city.name === cityInfo.name)
+      const response = await api.put('/favourites/cities', {cityId: city.id})
 
-      cityInFavourites && setIsFavourite(true)
-    } 
-  },[])
-
-  function ToggleFavourite() {
-    if (isFavourite) {
+      if (response.status !== 200) {
+        throw new Error()
+      }
+    } catch {
       setIsFavourite(false)
-    } else {
-      setIsFavourite(true)    
-    } 
+      toast({
+        title: 'Ops! Algo não aconteceu como o esperado!',
+        description:
+          'Não foi possível salvar a cidade nos seus favoritos.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top'
+      });
+    }
   }
 
   return (
     <Box bg="white" flexDirection="column" borderRadius="4px" w={["80%","100%"]} mx="auto">
-      <Flex bgImage={cityInfo.cityImgUrl} bgPosition="center" bgSize="cover" w="100%" h={["200px","256px"]} direction="row" borderTopLeftRadius="4px" borderTopRightRadius="4px" p="4">
+      <Flex bgImage={city.cityImgUrl} bgPosition="center" bgSize="cover" w="100%" h={["200px","256px"]} direction="row" borderTopLeftRadius="4px" borderTopRightRadius="4px" p="4">
         { isAuthenticated && (
           <IconButton 
             aria-label="Add city to favourite"
-            icon={<Icon as={isFavourite ? AiFillHeart : AiOutlineHeart} fontSize="4xl" color="red.500"/>}
+            icon={user && <Icon as={user.favourites.cities.includes(city.id) || isFavourite ? AiFillHeart : AiOutlineHeart} color="red.500"/>}
+            fontSize="4xl"
             variant="unstyled"
             onClick={ToggleFavourite}
+            bg="whiteAlpha.500"
+            isRound
           />
         )}
         
@@ -51,7 +79,7 @@ export default function CityCard({ cityInfo, country, favourite }: CityCardProps
 
       <Flex flexDirection="row" h="auto" borderX="1px" borderBottom="1px" borderColor="highlight.50" borderBottomLeftRadius="4px" borderBottomRightRadius="4px">
         <Box h="100%" maxW="70%" pt="6" pl="6">
-          <Text fontSize="md" fontWeight="600">{cityInfo.name}</Text>
+          <Text fontSize="md" fontWeight="600">{city.name}</Text>
           <Text fontSize="sm">{country.name}</Text>
         </Box>
         

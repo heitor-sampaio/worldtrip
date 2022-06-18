@@ -26,6 +26,7 @@ export const defaultPermissions = {
     create: true,
     edit: true,
     delete: true,
+    favourite: true,
   },
   social: {
     comment: {

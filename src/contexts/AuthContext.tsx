@@ -1,54 +1,44 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { destroyCookie, parseCookies, setCookie } from 'nookies'
-
-import { User } from '../types'
+import { Token, User } from '../types'
 import { api } from "../services/api";
-import { Toast, useToast } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
+import { generateJWT } from "../lib/generateJWT";
+import decode from 'jwt-decode'
 
-interface AuthContextProps {
-  user: User | null;
+interface AuthContextData {
+  user: User;
   isAuthenticated: boolean;
-  logIn(user: string, email: string): Promise<boolean>;
+  logIn(user: string, email: string): Promise<void>;
   logOut(): void;
+  refreshUser(): void
 }
 
-const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
+interface AuthContextProps {
+  children: ReactNode
+}
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState<User | undefined>();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+const AuthContext = createContext({} as AuthContextData);
+
+export function AuthProvider({ children }: AuthContextProps) {
+  const [user, setUser] = useState<User>();
+  const isAuthenticated = !!user;
   const toast = useToast()
-
-  async function getUser() {
-    return await api.get('/users').then((response) => response.data)
-  }
-
-  useEffect(() => {
-    const { '@worldtrip.token': token } = parseCookies()
-
-    if (token) {
-      setIsAuthenticated(true)
-
-      getUser().then(response => setUser(response))
-    }
-  },[])
 
   async function logIn(email: string, password: string) {
     try {
       const response = await api.post('/login', {email, password})
 
-      if (response.status === 200) {
-        const { user, token } = response.data
+      const { user, token } = response.data  
 
-        setUser(user)
-        setIsAuthenticated(true)
+      setCookie(undefined, '@worldtrip.token', token, {
+        maxAge: 60 * 60 * 24 * 7, // 7 Dias
+        path: '/'
+      })
 
-        setCookie(undefined, '@worldtrip.token', token)
+      setUser(user)
 
-        return true
-      } else {
-        throw new Error()
-      }
+      api.defaults.headers['Authorization'] = `Bearer ${token}`
     } catch (err) {
       toast({
         title: 'Falha no login',
@@ -63,13 +53,55 @@ export function AuthProvider({ children }) {
   }
 
   function logOut() {
-    setIsAuthenticated(false)
-    setUser(undefined)
+    setUser(null)
     destroyCookie(undefined, '@worldtrip.token')
   }
 
+  async function refreshUser() {
+    try {
+      await api.get('/users').then(response => {
+        const { user, newToken } = response.data
+
+        setUser(user)
+
+        setCookie(undefined, '@worldtrip.token', newToken)
+
+        api.defaults.headers['Authorization'] = `Bearer ${newToken}`
+      })
+    } catch(error) {
+      toast({
+        title: 'Ops! Algo não ocorreu como esperado!',
+        description:
+          'Não foi possível atualizar o usuário localmente.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      });
+      logOut()
+    }
+  }
+
+  useEffect(() => {
+    const { '@worldtrip.token': token } = parseCookies()
+
+    if (token) {
+      api.get('/users').then(response => {
+        const { user, newToken } = response.data
+
+        setUser(user)
+
+        setCookie(undefined, '@worldtrip.token', newToken)
+
+        api.defaults.headers['Authorization'] = `Bearer ${newToken}`
+      }).catch(() => {
+        logOut()
+      })
+    }
+  },[])
+
   return (
-    <AuthContext.Provider value={{user, isAuthenticated, logIn, logOut}}>
+    <AuthContext.Provider value={{user, isAuthenticated, logIn, logOut, refreshUser}}>
       {children}
     </AuthContext.Provider>
   )

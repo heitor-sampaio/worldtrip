@@ -30,6 +30,7 @@ export type Permissions = {
     create: boolean,
     edit: boolean,
     delete: boolean,
+    favourite: boolean
   },
   social: {
     comment: {
@@ -45,7 +46,7 @@ export type Permissions = {
 export type User = {
   id: string,
   email: string,
-  password: string,
+  password?: string,
   fullName: string,
   exibitionName: string,
   roles: string[],
@@ -146,8 +147,7 @@ export type Favourites = {
   travelPlans: string[],
 }
 
-export type DecodedToken = {
-  roles: string[],
-  permissions: Permissions,
-  sub: string;
+export type Token = {
+  user: User,
+  sub: string,
 }

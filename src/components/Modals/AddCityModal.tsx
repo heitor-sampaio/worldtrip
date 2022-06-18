@@ -14,10 +14,10 @@ export function AddCityModal({continent, countries}: CreateCityProps) {
   return (
     <Flex align="center" justify="center" ml="4">
       <IconButton aria-label="Adicionar cidade" icon={<FiPlusCircle/>} variant="unstyled" fontSize="2xl" color="gray.400" onClick={onOpen}/>
-
+      
       <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
         <ModalOverlay backdropFilter='blur(10px)'/>
-        <ModalContent bg='#F5F8FA'>
+        <ModalContent bg='#F5F8FA' w="90%">
           <ModalHeader bg="highlight.500" color="white" borderTopRadius="md">Adicionar uma cidade</ModalHeader>
           {/* <ModalCloseButton color="white" size="lg"/> */}
           <ModalBody>

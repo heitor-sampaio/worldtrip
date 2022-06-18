@@ -8,9 +8,12 @@ import Footer from "../../components/Footer";
 
 import { api } from "../../services/api";
 
-import { CountryFormatted, CityFormatted, ContinentFormatted } from '../../types'
+import { CountryFormatted, CityFormatted, ContinentFormatted, User, Token } from '../../types'
 import { useAuth } from "../../contexts/AuthContext";
 import { AddCityModal } from "../../components/Modals/AddCityModal";
+import { ReactNode, useEffect, useState } from "react";
+import { parseCookies } from "nookies";
+import decode from 'jwt-decode'
 
 interface ContinentProps {
   continentData: ContinentFormatted,
@@ -90,9 +93,8 @@ export default function Continent({ continentData: continent, countriesData: cou
               { cities.map((city: CityFormatted) => {
                 const cityCountry = FindCountryByCity(city)
                 return (
-                  <CityCard key={city.name} cityInfo={city} country={cityCountry} favourite/>
-                )})
-              }
+                  <CityCard key={city.name} cityInfo={city} country={cityCountry}/>
+                )}) }
             </SimpleGrid>
           </Box>
           :
@@ -109,8 +111,8 @@ export default function Continent({ continentData: continent, countriesData: cou
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const { continent } = params;
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { continent } = ctx.params;
   const slug = String(continent);
 
   const response = await api.get("/continents", { params: { continent: slug } }).then(response => (response.data))
