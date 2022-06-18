@@ -18,20 +18,16 @@ export default async function checkFavouritesCitiesPermissionsMiddleware(request
   const permissions = user.permissions as Permissions
 
   if ( request.method === 'PUT') {
-    if (permissions.cities.favourite) {
-      const response = NextResponse.next()
-  
-      response.headers.set('user', user.id)
-
-      return response
-    } else {
+    if (!permissions.cities.favourite) {
       return new Response(JSON.stringify({ message: 'Insufficient permissions.' }), {
         status: 401,
         headers: {
           'Content-Type': 'application/json',
         },
-      });
+      })
     }
+      
+    return NextResponse.next()
   }
 
   return new Response(JSON.stringify({ error: `Method '${request.method}' Not Allowed` }), {
