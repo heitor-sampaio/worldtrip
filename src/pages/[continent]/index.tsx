@@ -21,8 +21,9 @@ interface ContinentProps {
   citiesData?: CityFormatted[]
 }
 
-export default function Continent({ continentData: continent, countriesData: countries, citiesData: cities }: ContinentProps) { 
+export default function Continent({ continentData: continent, countriesData: countries, citiesData: citiesData }: ContinentProps) { 
   const { user } = useAuth()
+  const [cities, setCities] = useState(citiesData)
   
   const countriesNumber = countries?.length;
 
@@ -42,6 +43,10 @@ export default function Continent({ continentData: continent, countriesData: cou
     const country = countries.find(country => country.id === city.countryRef)
 
     return country
+  }
+
+  async function syncCities(newCity: CityFormatted) {
+    setCities([...cities, newCity])
   }
 
   return (
@@ -81,7 +86,7 @@ export default function Continent({ continentData: continent, countriesData: cou
               <Flex direction="row">
                 <Text fontSize={["2xl","4xl"]}>Cidade{citiesNumber > 1 && ("s")} disponíve{citiesNumber > 1 ? ("is") : ("l")}</Text>
                 
-                { user?.permissions.cities.create && <AddCityModal continent={continent} countries={countries}/> }
+                { user?.permissions.cities.create && <AddCityModal continent={continent} countries={countries} onAddCity={syncCities}/> }
               </Flex>
               
               <Flex direction="row" ml={["0","auto"]} align="center">

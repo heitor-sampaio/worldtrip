@@ -1,18 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as jose from 'jose'
-import { Permissions } from "../../../types";
+import { Permissions, User } from "../../../types";
 
 export default async function checkAuthMiddleware(request: NextRequest, response: NextResponse) {
   const token = request.cookies['@worldtrip.token']
-
-  if (!token) {
-    return new Response(JSON.stringify({ message: 'Not authenticated.' }), {
-      status: 401,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-  }
 
   const secret = process.env.JWT_SECRET
 
@@ -21,12 +12,12 @@ export default async function checkAuthMiddleware(request: NextRequest, response
     new TextEncoder().encode(secret)
   )
 
-  const permissions = payload.permissions as Permissions
+  const user = payload.user as User
+
+  const permissions = user.permissions as Permissions
 
   if ( request.method === 'POST') {
-    if (permissions.images.create) {
-      return NextResponse.next()
-    } else {
+    if (!permissions.images.create) {
       return new Response(JSON.stringify({ message: 'Not authorized.' }), {
         status: 401,
         headers: {
@@ -34,6 +25,8 @@ export default async function checkAuthMiddleware(request: NextRequest, response
         },
       });
     }
+
+    return NextResponse.next()
   }
 
   if ( request.method === 'DELETE') {

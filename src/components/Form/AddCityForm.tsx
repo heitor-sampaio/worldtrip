@@ -6,12 +6,13 @@ import * as yup from 'yup'
 import { FileInput, Input, Select } from '../../components/Form/components'
 import { useAuth } from "../../contexts/AuthContext";
 import { api } from "../../services/api";
-import { ContinentFormatted, CountryFormatted } from "../../types";
+import { CityFormatted, ContinentFormatted, CountryFormatted } from "../../types";
 
 interface AddCityFormProps {
   continent: ContinentFormatted,
   countries: CountryFormatted[]
-  onClose: () => void
+  onClose: () => void,
+  onAddCity: (city: CityFormatted) => void
 }
 
 type AddCityFormData = {
@@ -29,16 +30,18 @@ const schema = yup.object().shape({
   })
 })
 
-export default function AddCityForm({continent, countries, onClose}: AddCityFormProps) {
+export default function AddCityForm({continent, countries, onClose, onAddCity}: AddCityFormProps) {
   const { register, handleSubmit, formState: {errors, isSubmitting}, setError, trigger, reset} = useForm({ resolver: yupResolver(schema)});
   const { user } = useAuth()
   const [imageUrl, setImageUrl] = useState('');
   const [localImageUrl, setLocalImageUrl] = useState('');
   const [imageParams, setImageParams] = useState({});
+  const [isLoading, setIsLoading] = useState(false)
 
   const toast = useToast();
 
   const handleAddCity: SubmitHandler<AddCityFormData> = async (data, event) => {
+    setIsLoading(true)
     try{
       if (!imageUrl) {
         toast({
@@ -89,6 +92,8 @@ export default function AddCityForm({continent, countries, onClose}: AddCityForm
         throw new Error()
       }
 
+      await onAddCity(cityData.data.newCity)
+
       toast({
         title: 'Cidade adicionada',
         description: 'A cidade foi adicionada com sucesso.',
@@ -107,6 +112,7 @@ export default function AddCityForm({continent, countries, onClose}: AddCityForm
         position: 'top'
       });
     } finally {
+      setIsLoading(false)
       reset();
       setImageUrl('');
       setLocalImageUrl('');
@@ -145,7 +151,7 @@ export default function AddCityForm({continent, countries, onClose}: AddCityForm
 
         <InputGroup justifyContent="center" pt="5">
           <Button colorScheme="red" onClick={onClose}>Cancelar</Button>
-          <Button type="submit" colorScheme="yellow" color="white" ml="5">Adicionar</Button>
+          <Button type="submit" colorScheme="yellow" color="white" ml="5" isLoading={isLoading}>Adicionar</Button>
         </InputGroup>
 
       </VStack>
