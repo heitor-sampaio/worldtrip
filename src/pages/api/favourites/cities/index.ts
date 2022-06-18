@@ -23,7 +23,7 @@ export default async function favourtitesCitiesHandler(req: NextApiRequest, res:
     const { cityId } = req.body;
 
     try {
-      const data = await fauna.query(
+      await fauna.query(
         q.Let(
           {
             user: q.Get(q.Match(q.Index("user_by_id"), userId)),
