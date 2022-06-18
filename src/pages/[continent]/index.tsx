@@ -106,7 +106,13 @@ export default function Continent({ continentData: continent, countriesData: cou
           <VStack spacing="5" direction="column" justify="center" align="center" color="gray.300" textAlign="center" mt="10">
             <Text>Sentimos muito!</Text>
             <Text>Infelizmente este continente não possui nenhum destino cadastrado!</Text>
-            <Text>Solicite um cargo de editor e comece a adicionar seus destinos favoritos!</Text>
+            { user?.permissions.cities.create && 
+              <>
+                <Text>Adicione um agora!</Text>
+                <AddCityModal continent={continent} countries={countries} onAddCity={syncCities}/>
+              </>
+            }
+            { !user?.roles.includes('editor') || !user?.roles.includes('team') && <Text>Solicite um cargo de editor e comece a adicionar seus destinos favoritos!</Text> }
           </VStack>
         }
       </Flex>

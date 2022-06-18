@@ -39,7 +39,8 @@ export default function CreateUser() {
 
     const fullName = name.split(" ")
     
-    const exibitionName = `${fullName[0]} ${fullName.pop()}` 
+    let exibitionName
+    fullName.length > 1 ? exibitionName = `${fullName[0]} ${fullName.pop()}` : exibitionName = fullName[0]  
     
     const response = await api.post("/users", {email, password, fullName: name, exibitionName})
 
