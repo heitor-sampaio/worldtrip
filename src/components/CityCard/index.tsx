@@ -15,12 +15,9 @@ interface CityCardProps {
 }
 
 export default function CityCard({ cityInfo: city, country, favourite}: CityCardProps) {
-  const { isAuthenticated, user, refreshUser } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [isFavourite, setIsFavourite] = useState(favourite);
   const toast = useToast()
-  // const [user, setUser] = useState(authUser)
-
-  // console.log(user)
 
   async function ToggleFavourite() {
     try {
@@ -48,8 +45,6 @@ export default function CityCard({ cityInfo: city, country, favourite}: CityCard
       if (response.status !== 200) {
         throw new Error()
       }
-
-      refreshUser()
     } catch {
       setIsFavourite(false)
       toast({

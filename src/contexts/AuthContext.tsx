@@ -11,7 +11,6 @@ interface AuthContextData {
   isAuthenticated: boolean;
   logIn(user: string, email: string): Promise<void>;
   logOut(): void;
-  refreshUser(): void;
 }
 
 interface AuthContextProps {
@@ -57,22 +56,22 @@ export function AuthProvider({ children }: AuthContextProps) {
     destroyCookie(undefined, '@worldtrip.token')
   }
 
-  async function refreshUser() {
-    try {
+  // async function refreshUser() {
+  //   try {
       
-    } catch(error) {
-      toast({
-        title: 'Ops! Algo não ocorreu como esperado!',
-        description:
-          'Não foi possível atualizar o usuário localmente.',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'top',
-      });
-      logOut()
-    }
-  }
+  //   } catch(error) {
+  //     toast({
+  //       title: 'Ops! Algo não ocorreu como esperado!',
+  //       description:
+  //         'Não foi possível atualizar o usuário localmente.',
+  //       status: 'error',
+  //       duration: 5000,
+  //       isClosable: true,
+  //       position: 'top',
+  //     });
+  //     logOut()
+  //   }
+  // }
 
   useEffect(() => {
     const { '@worldtrip.token': token } = parseCookies()
@@ -84,6 +83,8 @@ export function AuthProvider({ children }: AuthContextProps) {
         setUser(user)
 
         setCookie(undefined, '@worldtrip.token', newToken)
+
+        api.defaults.headers['Authorization'] = `Bearer ${newToken}`
       }).catch(() => {
         logOut()
       })
@@ -91,7 +92,7 @@ export function AuthProvider({ children }: AuthContextProps) {
   },[])
 
   return (
-    <AuthContext.Provider value={{user, isAuthenticated, logIn, logOut, refreshUser}}>
+    <AuthContext.Provider value={{user, isAuthenticated, logIn, logOut}}>
       {children}
     </AuthContext.Provider>
   )

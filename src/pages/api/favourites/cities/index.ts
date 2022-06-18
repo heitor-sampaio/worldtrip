@@ -17,6 +17,10 @@ export default async function favourtitesCitiesHandler(req: NextApiRequest, res:
 
   const userId = res.getHeader('user') as string
 
+  const headers = req.headers
+
+  console.log(headers)
+
   res.removeHeader('user')
 
   if (req.method === 'PUT') {
@@ -50,7 +54,7 @@ export default async function favourtitesCitiesHandler(req: NextApiRequest, res:
 
       return res.status(200).json({ message: 'Success' })
     } catch(err) {
-      return res.status(501).json({ error: `Sorry something Happened! ${err.message}` })
+      return res.status(501).json({ error: `Sorry something Happened! ${err.message} : ${err.errors()[0].description}` })
     }
   }
 
