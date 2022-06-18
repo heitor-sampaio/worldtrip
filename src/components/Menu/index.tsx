@@ -13,7 +13,7 @@ import { api } from "../../services/api";
 export default function Menu() {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onClose } = useMenuDrawer();
-  const { logOut, user } = useAuth();
+  const { logOut, user, refreshUser } = useAuth();
   const toast = useToast()
 
   async function setEditor() {
@@ -42,6 +42,8 @@ export default function Menu() {
       }
 
       await api.put('/users/permissions', {permissionsToUpdate})
+
+      refreshUser()
 
       toast({
         title: 'Bem vindo(a) ao time!',
