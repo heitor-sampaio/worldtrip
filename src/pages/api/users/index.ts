@@ -56,7 +56,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         )
       ).then((res) => res)
 
-      return res.status(200).json({createdUser: { email, password, fullName, roles, permissions }})
+      return res.status(200).json({createdUser})
     } catch (error) {
       return res.status(500).json({ error })
     }

@@ -1,4 +1,4 @@
-import { Button, Flex, HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import { Button, Flex, HStack, SimpleGrid, Text, useToast, VStack } from "@chakra-ui/react";
 import Link from "next/link"
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -10,6 +10,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { api } from "../../services/api";
 import { useAuth } from "../../contexts/AuthContext";
+import { useState } from "react";
 
 type CreatUserFormData = {
   name: string;
@@ -26,27 +27,48 @@ const schema = yup.object().shape({
 })
 
 export default function CreateUser() {
-  const { register, handleSubmit, formState: {errors, isSubmitting} }= useForm({ resolver: yupResolver(schema)});
+  const { register, handleSubmit, formState: {errors} }= useForm({ resolver: yupResolver(schema)});
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter();
   const { logIn } = useAuth()
+  const toast = useToast()
 
   const handleCreateUser: SubmitHandler<CreatUserFormData> = async (data, event) => {
-    const { name, email, password, passwordConfirmation } = data;
+    try {
+      setIsLoading(true)
 
-    if ( password !== passwordConfirmation) {
-      return false
-    }
+      const { name, email, password, passwordConfirmation } = data;
 
-    const fullName = name.split(" ")
-    
-    const exibitionName = `${fullName[0]} ${fullName.pop()}` 
-    
-    const response = await api.post("/users", {email, password, fullName: name, exibitionName})
+      if ( password !== passwordConfirmation) {
+        return false
+      }
 
-    if (response.status === 200) {
-      logIn(email, password)
+      const fullName = name.split(" ")
+      
+      let exibitionName
+      fullName.length > 1 ? exibitionName = `${fullName[0]} ${fullName.pop()}` : exibitionName = fullName[0]  
+      
+      const response = await api.post("/users", {email, password, fullName: name, exibitionName})
 
-      router.push("/");
+      if (response.status === 200) {
+        logIn(email, password)
+
+        router.push("/");
+      } else {
+        throw new Error();
+      }
+    } catch {
+      setIsLoading(false)
+
+      toast({
+        title: 'Ops! Algo não esperado aconteceu!',
+        description:
+          'Não foi possível criar sua conta. Por favor, tente novamente.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top'
+      });
     }
   }
 
@@ -74,7 +96,7 @@ export default function CreateUser() {
               <Link href="/" passHref>
                 <Button colorScheme="red">Cancelar</Button>
               </Link>
-              <Button type="submit" bg="highlight.500" color="white" isLoading={isSubmitting}>Salvar</Button>
+              <Button type="submit" colorScheme="yellow" color="white" isLoading={isLoading}>Salvar</Button>
             </HStack>
           </Flex>
         </Flex>
