@@ -75,8 +75,7 @@ To provide better code maintainability, this project was built with [TypeScript]
 ## Planned features 🧭
 
 - [ ] Travel plans
-- [ ] Local storage of travel plans
-- [ ] Cloud storage of travel plans
+- [ ] Cloud and local storage of travel plans
 - [ ] Share travel plans with others users
 - [ ] Destinations and travel plans reviews by other users
 - [ ] Recomended destinations and travels plans based on user's reviews
