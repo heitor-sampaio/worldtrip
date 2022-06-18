@@ -71,7 +71,6 @@ export type ContinentRaw = {
 }
 
 export type ContinentFormatted = {
-  continentRef: FaunaRef,
   id: string,
   slug: string,
   continentName: string,
@@ -100,7 +99,6 @@ export type CityRaw = {
 }
 
 export type CityFormatted = {
-  cityRef: FaunaRef,
   id: string,
   slug: string,
   name: string,
@@ -129,7 +127,6 @@ export type CountryRaw = {
 }
 
 export type CountryFormatted = {
-  countryRef: string,
   id: string,
   name: string,
   languages: string[],

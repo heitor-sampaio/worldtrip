@@ -90,13 +90,13 @@ export default function Menu() {
             </Flex>
 
             <DrawerBody display="flex" flexDirection="column">
-              <NavLink  href="/" linkText="Configurações da conta" />
+              {/* <NavLink  href="/" linkText="Configurações da conta" />
               
               <NavLink  href="/" linkText="Meus favoritos" />
               
-              <NavLink  href="/" linkText="Meus roteiros" />
+              <NavLink  href="/" linkText="Meus roteiros" /> */}
 
-              <Flex justify="center" align="center" w="70%" mx="auto" my="auto">
+              <Flex justify="center" align="center" w="70%" h="full" mx="auto" my="auto">
                 <Text textAlign="center">Novas funcionalidades estarão disponíveis em breve 😄</Text>
               </Flex>
 

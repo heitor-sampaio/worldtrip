@@ -4,6 +4,7 @@ import initMiddleware from '../../../lib/init-middleware';
 import { fauna } from "../../../services/fauna";
 import { query as q } from 'faunadb'
 import { v4 as uuid } from 'uuid'
+import { CityRaw } from '../../../types';
 
 const cors = initMiddleware(
   Cors({
@@ -68,9 +69,11 @@ export default async function citiesHandler(req: NextApiRequest, res: NextApiRes
             })
           }
         )
-      )
+      ) as any
 
-      return res.status(201).json({ success: true })
+      const newCity = data.city.data as CityRaw
+
+      return res.status(201).json({ newCity })
     } catch(err) {
       return res.status(501).json({ error: `Sorry something Happened! ${err.message}` })
     }

@@ -1,14 +1,15 @@
 import { useDisclosure, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Text, IconButton, Flex } from "@chakra-ui/react"
 import { FiPlusCircle } from "react-icons/fi"
-import { ContinentFormatted, CountryFormatted } from "../../types"
+import { CityFormatted, ContinentFormatted, CountryFormatted } from "../../types"
 import AddCityForm from "../Form/AddCityForm"
 
 interface CreateCityProps {
   continent: ContinentFormatted,
-  countries: CountryFormatted[]
+  countries: CountryFormatted[],
+  onAddCity: (city: CityFormatted) => void
 }
 
-export function AddCityModal({continent, countries}: CreateCityProps) {
+export function AddCityModal({continent, countries, onAddCity}: CreateCityProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
@@ -19,9 +20,8 @@ export function AddCityModal({continent, countries}: CreateCityProps) {
         <ModalOverlay backdropFilter='blur(10px)'/>
         <ModalContent bg='#F5F8FA' w="90%">
           <ModalHeader bg="highlight.500" color="white" borderTopRadius="md">Adicionar uma cidade</ModalHeader>
-          {/* <ModalCloseButton color="white" size="lg"/> */}
           <ModalBody>
-            <AddCityForm continent={continent} countries={countries} onClose={onClose}/>
+            <AddCityForm continent={continent} countries={countries} onClose={onClose} onAddCity={onAddCity}/>
           </ModalBody>
         </ModalContent>
       </Modal>

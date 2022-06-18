@@ -25,7 +25,7 @@ export default function CityCard({ cityInfo: city, country, favourite}: CityCard
         toast({
           title: 'Ops! Algo não aconteceu como o esperado!',
           description:
-            'Sincronizando usuário',
+            'Sincronizando usuário. Por favor, tente novamente em alguns instantes.',
           status: 'error',
           duration: 5000,
           isClosable: true,
