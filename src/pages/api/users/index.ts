@@ -6,7 +6,8 @@ import { v4 as uuid } from 'uuid'
 
 import { fauna } from "../../../services/fauna";
 import { defaultPermissions } from '../../../config/permissions';
-import { DecodedToken } from '../../../types';
+import { Token } from '../../../types';
+import { generateJWT } from '../../../lib/generateJWT';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
@@ -79,7 +80,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           .json({ error: true, code: 'token.invalid', message: 'Token not present.' })
       }
 
-      const decoded = decode(token as string) as DecodedToken;
+      const decoded = decode(token as string) as Token;
 
       const email = decoded.sub
 
@@ -96,7 +97,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
       delete user.password
 
-      return res.status(200).json(user)
+      const newToken = generateJWT(user.email, {user})
+
+      return res.status(200).json({user, newToken})
     } catch {
       return res.status(404).json({error: 'User not found'})
     }

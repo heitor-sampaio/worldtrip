@@ -1,9 +1,9 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { query as q } from 'faunadb'
 import { NextApiRequest, NextApiResponse } from 'next';
+import { generateJWT } from '../../../lib/generateJWT';
 
 import { fauna } from "../../../services/fauna";
-import { generateJwtToken } from '../../../services/token';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
@@ -22,15 +22,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const user = response.data
       
       if (user.password === password) {
-        const userData = user
+        const userData = {user}
 
-        delete userData.password
-        delete userData.fullName
-        delete userData.likes
+        delete userData.user.password
 
-        const token = generateJwtToken(email, userData)
+        const token = generateJWT(email, userData)
 
-        const response = {user: userData, token}
+        const response = {user: userData.user, token}
 
         return res.status(200).json(response)
       } else {

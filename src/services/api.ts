@@ -19,7 +19,7 @@ export function setupApiClient(ctx = undefined) {
   const api = axios.create({
     baseURL: `${url}/api`,
     headers: {
-      authorization: `Bearer ${token}` 
+      Authorization: `Bearer ${token}` 
     }
   })
 

@@ -62,19 +62,18 @@ To provide better code maintainability, this project was built with [TypeScript]
 
 ## Features 🔥
 
-- Dynamic page building with data fetched from fake API
+- Dynamic page building with data fetched from API
 - Responsiveness to desktop e mobile platforms
 - Accessibility for screen readers
-- Local storage of favourites destinations
 - Account creation
 - User authentication system
-- Roles and permissions to users actions 🆕
-- Editors now can add cities to continents 🆕
-- Images upload 🆕
+- Roles and permissions to users actions
+- Editors can add cities to continents
+- Images upload
+- Cloud storage of favourites destinations 🆕
 
 ## Planned features 🧭
 
-- [ ] Cloud storage of favourites destinations
 - [ ] Travel plans
 - [ ] Local storage of travel plans
 - [ ] Cloud storage of travel plans
@@ -130,6 +129,9 @@ This endpoint returns a JSON format object with all continents, countries and ci
   - Roles and permissions to users actions
   - Editors now can add cities to continents
   - Images upload
+- **v0.0.4 - 17/06/22 | New features**
+  - Users can now become editors via the menu
+  - Favourites cities are now saved on cloud and localstorage(cookies)
 
 ## Want to contribute? 🚀
 
