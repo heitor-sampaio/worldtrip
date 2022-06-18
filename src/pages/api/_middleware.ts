@@ -5,7 +5,7 @@ export default async function checkAuthMiddleware(request: NextRequest) {
   const response = NextResponse.next()
 
   const authenticatedRoutes = [
-    {route: '/users', methods: ['POST', 'PUT', 'DELETE']},
+    {route: '/users', methods: ['GET', 'PUT', 'DELETE']},
     {route: '/users/roles', methods: ['GET', 'POST', 'PUT', 'DELETE']},
     {route: '/users/permissions', methods: ['GET', 'POST', 'PUT', 'DELETE']},
 

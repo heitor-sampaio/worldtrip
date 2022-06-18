@@ -112,7 +112,7 @@ export default function Continent({ continentData: continent, countriesData: cou
                 <AddCityModal continent={continent} countries={countries} onAddCity={syncCities}/>
               </>
             }
-            { !user?.roles.includes('editor') || !user?.roles.includes('team') && <Text>Solicite um cargo de editor e comece a adicionar seus destinos favoritos!</Text> }
+            { !user?.roles.includes('editor') && !user?.roles.includes('team') && <Text>Solicite um cargo de editor e comece a adicionar seus destinos favoritos!</Text> }
           </VStack>
         }
       </Flex>
