@@ -6,15 +6,16 @@ import AddCityForm from "../Form/AddCityForm"
 interface CreateCityProps {
   continent: ContinentFormatted,
   countries: CountryFormatted[],
+  iconSize: string,
   onAddCity: (city: CityFormatted) => void
 }
 
-export function AddCityModal({continent, countries, onAddCity}: CreateCityProps) {
+export function AddCityModal({continent, countries, iconSize, onAddCity}: CreateCityProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <Flex align="center" justify="center" ml="4">
-      <IconButton aria-label="Adicionar cidade" icon={<FiPlusCircle/>} variant="unstyled" fontSize="2xl" color="gray.400" onClick={onOpen}/>
+      <IconButton aria-label="Adicionar cidade" display="flex" justifyItems="center" icon={<FiPlusCircle/>} variant="unstyled" fontSize={iconSize} color="highlight.500" onClick={onOpen}/>
       
       <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
         <ModalOverlay backdropFilter='blur(10px)'/>

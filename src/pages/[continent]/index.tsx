@@ -86,7 +86,7 @@ export default function Continent({ continentData: continent, countriesData: cou
               <Flex direction="row">
                 <Text fontSize={["2xl","4xl"]}>Cidade{citiesNumber > 1 && ("s")} disponíve{citiesNumber > 1 ? ("is") : ("l")}</Text>
                 
-                { user?.permissions.cities.create && <AddCityModal continent={continent} countries={countries} onAddCity={syncCities}/> }
+                { user?.permissions.cities.create && <AddCityModal continent={continent} countries={countries} iconSize="2xl" onAddCity={syncCities}/> }
               </Flex>
               
               <Flex direction="row" ml={["0","auto"]} align="center">
@@ -109,7 +109,7 @@ export default function Continent({ continentData: continent, countriesData: cou
             { user?.permissions.cities.create && 
               <>
                 <Text>Adicione um agora!</Text>
-                <AddCityModal continent={continent} countries={countries} onAddCity={syncCities}/>
+                <AddCityModal continent={continent} countries={countries} iconSize="5xl" onAddCity={syncCities}/>
               </>
             }
             { !user?.roles.includes('editor') && !user?.roles.includes('team') && <Text>Solicite um cargo de editor e comece a adicionar seus destinos favoritos!</Text> }

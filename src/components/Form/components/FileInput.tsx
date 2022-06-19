@@ -29,7 +29,6 @@ import {
   UseFormTrigger,
 } from 'react-hook-form';
 import { FiAlertCircle, FiPlus } from 'react-icons/fi';
-import { useAuth } from '../../../contexts/AuthContext';
 
 export interface FileInputProps {
   name: string;

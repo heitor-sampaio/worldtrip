@@ -1,8 +1,6 @@
 import { VStack, Flex, InputGroup, Button, useToast } from "@chakra-ui/react";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import * as yup from 'yup'
 import { FileInput, Input, Select } from '../../components/Form/components'
 import { useAuth } from "../../contexts/AuthContext";
 import { api } from "../../services/api";
@@ -20,25 +18,34 @@ type AddCityFormData = {
   country: string,
 }
 
-const schema = yup.object().shape({
-  name: yup.string().required("Informe o nome da cidade"),
-  country: yup.string().required("Selecione um país"),
-  image: yup.mixed().test("fileSize", "O arquivo deve ser menor que 10MB", (value) => {
-    console.log(value.lenght)
-    if (!value.length) return false // attachment is optional
-    return value[0].size <= 10000000
-  })
-})
-
 export default function AddCityForm({continent, countries, onClose, onAddCity}: AddCityFormProps) {
-  const { register, handleSubmit, formState: {errors, isSubmitting}, setError, trigger, reset} = useForm({ resolver: yupResolver(schema)});
+  const { register, handleSubmit, formState: {errors, isSubmitting}, setError, trigger, reset} = useForm();
   const { user } = useAuth()
   const [imageUrl, setImageUrl] = useState('');
   const [localImageUrl, setLocalImageUrl] = useState('');
   const [imageParams, setImageParams] = useState({});
   const [isLoading, setIsLoading] = useState(false)
-
   const toast = useToast();
+
+  const formValidations = {
+    image: {
+      required: true,
+      validate: {
+        lessThen10MB: file =>
+          file[0].size <= 10000000 || 'O arquivo deve ser menor que 10MB',
+        acceptedFormats: file =>
+          ['image./jpeg', 'image./jpg', 'image/png', 'image/gif'].includes(file[0].type) ||
+          'Somente são aceitos arquivos PNG, JPEG e GIF',
+      },
+    },
+    name: {
+      required: true,
+      minLenght: 2,
+    },
+    country: {
+      required: true,
+    },
+  };
 
   const handleAddCity: SubmitHandler<AddCityFormData> = async (data, event) => {
     setIsLoading(true)
@@ -120,17 +127,12 @@ export default function AddCityForm({continent, countries, onClose, onAddCity}: 
     }
   }
 
-  const tip = {
-    title: "Ajuda - Link da imagem",
-    tip: "Realize o upload da sua imagem em qualquer serviço de upload e cole aqui o link de imagem"
-  }
-
   return (
     <Flex as="form" onSubmit={handleSubmit(handleAddCity)} w="100%" justify="center">
       <VStack spacing="5" my="10">
-        <Input type="text" name="name" label="Nome" error={errors.email} {...register("name")}/>
+        <Input type="text" name="name" label="Nome" error={errors.name} {...register("name", formValidations.name)}/>
 
-        <Select placeholder="Escolha o país" label="País" error={errors.email} {...register("country")}>
+        <Select placeholder="Escolha o país" label="País" error={errors.country} {...register("country", formValidations.country)}>
           { countries.map(country => {
             return (
               <option key={country.id} value={country.id}>{country.name}</option>
@@ -139,14 +141,14 @@ export default function AddCityForm({continent, countries, onClose, onAddCity}: 
         </Select>
 
         <FileInput
-          name="fileSize"
+          name="image"
           setImageUrl={setImageUrl}
           localImageUrl={localImageUrl}
           setLocalImageUrl={setLocalImageUrl}
           setError={setError}
           trigger={trigger}
           error={errors.image}
-          {...register('image')}
+          {...register('image', formValidations.image)}
         />
 
         <InputGroup justifyContent="center" pt="5">
