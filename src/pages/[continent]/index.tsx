@@ -8,12 +8,11 @@ import Footer from "../../components/Footer";
 
 import { api } from "../../services/api";
 
-import { CountryFormatted, CityFormatted, ContinentFormatted, User, Token } from '../../types'
+import { CountryFormatted, CityFormatted, ContinentFormatted } from '../../types'
 import { useAuth } from "../../contexts/AuthContext";
 import { AddCityModal } from "../../components/Modals/AddCityModal";
-import { ReactNode, useEffect, useState } from "react";
-import { parseCookies } from "nookies";
-import decode from 'jwt-decode'
+import { useState } from "react";
+import { ContinentMenu } from "../../components/Menus/Continent";
 
 interface ContinentProps {
   continentData: ContinentFormatted,
@@ -21,8 +20,9 @@ interface ContinentProps {
   citiesData?: CityFormatted[]
 }
 
-export default function Continent({ continentData: continent, countriesData: countries, citiesData: citiesData }: ContinentProps) { 
+export default function Continent({ continentData: continent, countriesData, citiesData }: ContinentProps) { 
   const { user } = useAuth()
+  const [countries, setCountries] = useState(countriesData)
   const [cities, setCities] = useState(citiesData)
   
   const countriesNumber = countries?.length;
@@ -47,6 +47,10 @@ export default function Continent({ continentData: continent, countriesData: cou
 
   async function syncCities(newCity: CityFormatted) {
     setCities([...cities, newCity])
+  }
+
+  async function syncCountries(newCountry: CountryFormatted) {
+    setCountries([...countries, newCountry])
   }
 
   return (
@@ -83,10 +87,11 @@ export default function Continent({ continentData: continent, countriesData: cou
         { citiesNumber > 0 ?
           <Box as="section">
             <Flex direction={["column","row"]} pb={["2", "10"]}>
-              <Flex direction="row">
+              <Flex direction="row" align="center">
                 <Text fontSize={["2xl","4xl"]}>Cidade{citiesNumber > 1 && ("s")} disponíve{citiesNumber > 1 ? ("is") : ("l")}</Text>
                 
-                { user?.permissions.cities.create && <AddCityModal continent={continent} countries={countries} iconSize="2xl" onAddCity={syncCities}/> }
+                {/* { user?.permissions.cities.create && <AddCityModal continent={continent} countries={countries} iconSize="2xl" onAddCity={syncCities}/> } */}
+                { (user?.roles.includes('editor') || user?.roles.includes('team')) && <ContinentMenu continent={continent} countries={countries} iconSize="2xl" onAddCity={syncCities} onAddCountry={syncCountries}/> }
               </Flex>
               
               <Flex direction="row" ml={["0","auto"]} align="center">
@@ -109,7 +114,7 @@ export default function Continent({ continentData: continent, countriesData: cou
             { user?.permissions.cities.create && 
               <>
                 <Text>Adicione um agora!</Text>
-                <AddCityModal continent={continent} countries={countries} iconSize="5xl" onAddCity={syncCities}/>
+                <ContinentMenu continent={continent} countries={countries} iconSize="4xl" onAddCity={syncCities} onAddCountry={syncCountries}/>
               </>
             }
             { !user?.roles.includes('editor') && !user?.roles.includes('team') && <Text>Solicite um cargo de editor e comece a adicionar seus destinos favoritos!</Text> }

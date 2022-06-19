@@ -32,6 +32,7 @@ import { FiAlertCircle, FiPlus } from 'react-icons/fi';
 
 export interface FileInputProps {
   name: string;
+  placeholder: string;
   error?: FieldError;
   setImageUrl: Dispatch<SetStateAction<string>>;
   localImageUrl: string;
@@ -49,6 +50,7 @@ const FileInputBase: ForwardRefRenderFunction<
 > = (
   {
     name,
+    placeholder,
     error = null,
     setImageUrl,
     localImageUrl,
@@ -202,8 +204,8 @@ const FileInputBase: ForwardRefRenderFunction<
                   flexDir="column"
                 >
                   <Icon as={FiPlus} w={14} h={14} />
-                  <Text as="span" pt={2} textAlign="center">
-                    Adicione sua imagem
+                  <Text as="span" pt={2} px={2} textAlign="center">
+                    {placeholder}
                   </Text>
                 </Flex>
               </Box>

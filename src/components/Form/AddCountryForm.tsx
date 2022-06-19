@@ -1,25 +1,25 @@
 import { VStack, Flex, InputGroup, Button, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { FileInput, Input, Select } from '../../components/Form/components'
+import { FileInput, Input } from '../../components/Form/components'
 import { useAuth } from "../../contexts/AuthContext";
 import { api } from "../../services/api";
-import { CityFormatted, ContinentFormatted, CountryFormatted } from "../../types";
+import { ContinentFormatted, CountryFormatted } from "../../types";
 
 interface AddCityFormProps {
   continent: ContinentFormatted,
-  countries: CountryFormatted[]
   onClose: () => void,
-  onAddCity: (city: CityFormatted) => void
+  onAddCountry: (country: CountryFormatted) => void
 }
 
-type AddCityFormData = {
+type AddCountryFormData = {
   name: string,
-  country: string,
+  languages: string,
+  image: string,
 }
 
-export default function AddCityForm({continent, countries, onClose, onAddCity}: AddCityFormProps) {
-  const { register, handleSubmit, formState: {errors, isSubmitting}, setError, trigger, reset} = useForm();
+export default function AddCityForm({continent, onClose, onAddCountry}: AddCityFormProps) {
+  const { register, handleSubmit, formState: {errors}, setError, trigger, reset} = useForm();
   const { user } = useAuth()
   const [imageUrl, setImageUrl] = useState('');
   const [localImageUrl, setLocalImageUrl] = useState('');
@@ -42,12 +42,12 @@ export default function AddCityForm({continent, countries, onClose, onAddCity}: 
       required: true,
       minLenght: 2,
     },
-    country: {
+    language: {
       required: true,
     },
   };
 
-  const handleAddCity: SubmitHandler<AddCityFormData> = async (data, event) => {
+  const handleAddCountry: SubmitHandler<AddCountryFormData> = async (data, event) => {
     setIsLoading(true)
     try{
       if (!imageUrl) {
@@ -69,7 +69,23 @@ export default function AddCityForm({continent, countries, onClose, onAddCity}: 
         throw new Error()
       }
 
-      const { name, country } = data;
+      const { name, languages } = data;
+
+      const languagesArray = languages.split(' ')
+
+      const languagesArrayFormatted = languagesArray.map(language => {
+        let countryName
+
+        const removeComma = language.includes(',') && language.replace(',','')
+
+        if ( removeComma ) {
+          countryName = removeComma.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
+        }
+
+        countryName = language
+
+        return countryName
+      })
 
       let addedBy = {}
 
@@ -85,25 +101,25 @@ export default function AddCityForm({continent, countries, onClose, onAddCity}: 
         }
       }
 
-      const newCity = {
+      const newCountry = {
         name,
+        languages: languagesArrayFormatted,
         continentRef: continent.id,
-        countryRef: country,
-        cityImgUrl: imageUrl,
+        countryImgUrl: imageUrl,
         addedBy
       }
       
-      const cityData = await api.post('/cities', newCity)
+      const countryData = await api.post('/countries', newCountry)
 
-      if (cityData.status !== 201) {
+      if (countryData.status !== 201) {
         throw new Error()
       }
 
-      await onAddCity(cityData.data.newCity)
+      await onAddCountry(countryData.data.newCountry)
 
       toast({
-        title: 'Cidade adicionada',
-        description: 'A cidade foi adicionada com sucesso.',
+        title: 'País adicionado',
+        description: 'O paiś foi adicionada com sucesso.',
         status: 'success',
         duration: 5000,
         isClosable: true,
@@ -112,9 +128,9 @@ export default function AddCityForm({continent, countries, onClose, onAddCity}: 
     } catch {
       toast({
         title: 'Falha no cadastro',
-        description: 'Ocorreu um erro ao tentar cadastrar a cidade.',
+        description: 'Ocorreu um erro ao tentar cadastrar o país.',
         status: 'error',
-        duration: 2000,
+        duration: 5000,
         isClosable: true,
         position: 'top'
       });
@@ -128,21 +144,15 @@ export default function AddCityForm({continent, countries, onClose, onAddCity}: 
   }
 
   return (
-    <Flex as="form" onSubmit={handleSubmit(handleAddCity)} w="100%" justify="center">
+    <Flex as="form" onSubmit={handleSubmit(handleAddCountry)} w="100%" justify="center">
       <VStack spacing="5" my="10">
         <Input type="text" name="name" label="Nome" error={errors.name} {...register("name", formValidations.name)}/>
 
-        <Select placeholder="Escolha o país" label="País" error={errors.country} {...register("country", formValidations.country)}>
-          { countries.map(country => {
-            return (
-              <option key={country.id} value={country.id}>{country.name}</option>
-            )
-          })}
-        </Select>
+        <Input type="text" name="languages" label="Língua(s) oficial(is)" error={errors.languages} {...register("languages", formValidations.language)}/>
 
         <FileInput
           name="image"
-          placeholder="Adicione uma imagem da cidade"
+          placeholder="Adicione uma imagem da bandeira do pais"
           setImageUrl={setImageUrl}
           localImageUrl={localImageUrl}
           setLocalImageUrl={setLocalImageUrl}

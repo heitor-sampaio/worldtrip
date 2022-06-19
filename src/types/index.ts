@@ -8,6 +8,13 @@ export type Permissions = {
     edit: boolean,
     delete: boolean,
   },
+  countries: {
+    view: boolean,
+    edit: boolean,
+    create: boolean,
+    delete: boolean,
+    favourite: boolean
+  },
   cities: {
     view: boolean,
     edit: boolean,

@@ -10,6 +10,7 @@ export default async function checkAuthMiddleware(request: NextRequest) {
     {route: '/users/permissions', methods: ['GET', 'POST', 'PUT', 'DELETE']},
 
     {route: '/cities', methods: ['POST', 'PUT', 'DELETE']},
+    {route: '/countries', methods: ['POST', 'PUT', 'DELETE']},
     {route: '/continents', methods: ['POST', 'PUT', 'DELETE']},
     {route: '/favourites/cities', methods: ['GET', 'POST', 'PUT', 'DELETE']},
     {route: '/images', methods: ['GET', 'POST', 'PUT', 'DELETE']},

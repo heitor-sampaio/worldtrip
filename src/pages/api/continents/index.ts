@@ -41,8 +41,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         const response = {continent: formatedContinentData, countries: formatedCountriesData, cities: formatedCitiesData}
 
         return res.status(200).json(response)
-      } catch (error) {
-        return res.status(500).json({ error })
+      } catch (err) {
+        return res.status(500).json({ error: err.message, msg: err[0]})
       }
     } else {
       try {

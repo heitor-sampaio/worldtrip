@@ -4,6 +4,15 @@ export const defaultPermissions = {
     edit: false,
     delete: false,
   },
+  countries: {
+    ties: {
+    view: true,
+    edit: false,
+    create: false,
+    delete: false,
+    favourite: true
+    }
+  },
   cities: {
     view: true,
     edit: false,

@@ -3,7 +3,7 @@ import { IoChevronBack } from 'react-icons/io5'
 import { RiMenuLine } from "react-icons/ri";
 import { useAuth } from "../../contexts/AuthContext";
 import { useMenuDrawer } from "../../contexts/MenuDrawerContext";
-import Menu from "../Menu";
+import Menu from "../Menus/Main";
 
 interface HeaderProps {
   enableNavigation?: boolean,

@@ -1,14 +1,14 @@
 import { Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, Flex, Divider, DrawerBody, Switch, Text, useColorMode, Link, Button, DrawerFooter, Icon, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Image, Box, useToast } from "@chakra-ui/react";
 import { HiOutlineLogout } from 'react-icons/hi'
 
-import LoginForm from "../Form/LoginForm";
+import LoginForm from "../../Form/LoginForm";
 import { NavLink } from "./NavLink";
 import Profile from "./Profile";
 
-import { useAuth } from "../../contexts/AuthContext";
-import { useMenuDrawer } from "../../contexts/MenuDrawerContext";
-import { DefaultAlert } from "../AlertDialogs/DefaultAlert";
-import { api } from "../../services/api";
+import { useAuth } from "../../../contexts/AuthContext";
+import { useMenuDrawer } from "../../../contexts/MenuDrawerContext";
+import { DefaultAlert } from "../../AlertDialogs/DefaultAlert";
+import { api } from "../../../services/api";
 
 export default function Menu() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -21,6 +21,13 @@ export default function Menu() {
       await api.post('/users/roles', { role: 'editor'})
 
       const permissionsToUpdate = {
+        countries: {
+          view: true,
+          edit: true,
+          create: true,
+          delete: false,
+          favourite: true
+        },
         cities: {
           view: true,
           edit: true,
