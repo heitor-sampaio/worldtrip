@@ -40,6 +40,7 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({ typ
           focusBorderColor="highlight.500"
           errorBorderColor='red.500'
           variant="outline"
+          bg="white"
           _hover={{ bgColor: 'gray.50' }}
           ref={ref}
           {...rest}

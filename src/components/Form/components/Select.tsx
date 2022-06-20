@@ -21,6 +21,7 @@ const SelectBase: ForwardRefRenderFunction<HTMLSelectElement, SelectProps> = ({ 
         id={name}
         focusBorderColor="highlight.500"
         variant="outline"
+        bg="white"
         _hover={{ bgColor: 'gray.50' }}
         ref={ref}
         {...rest}

@@ -25,7 +25,7 @@ export function ContinentMenu({ continent, countries, iconSize, popOverPlacement
           <FiPlusCircle />
         </Button>
       </PopoverTrigger>
-      <PopoverContent w="auto" shadow="xl" _focus={{border: '1px', borderColor: 'highlight.500'}}>
+      <PopoverContent w="auto" shadow="xl" border="1px" borderColor="highlight.50" _focus={{border: '1px', borderColor: 'highlight.50'}}>
         <PopoverArrow color="highlight.500" bg="highlight.500"/>
         <PopoverHeader bg="highlight.500" color="white" px="8" fontWeight="bold" borderTopRadius="md">Adicionar</PopoverHeader>
         <PopoverBody>

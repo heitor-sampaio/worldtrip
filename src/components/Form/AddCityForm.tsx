@@ -1,4 +1,4 @@
-import { VStack, Flex, InputGroup, Button, useToast } from "@chakra-ui/react";
+import { VStack, Flex, InputGroup, Button, Text, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FileInput, Input, Select } from '../../components/Form/components'
@@ -128,8 +128,10 @@ export default function AddCityForm({continent, countries, onClose, onAddCity}: 
   }
 
   return (
-    <Flex as="form" onSubmit={handleSubmit(handleAddCity)} w="100%" justify="center">
+    <Flex as="form" onSubmit={handleSubmit(handleAddCity)} direction="column" w="100%" justify="center">
+
       <VStack spacing="5" my="10">
+
         <Input type="text" name="name" label="Nome" error={errors.name} {...register("name", formValidations.name)}/>
 
         <Select placeholder="Escolha o país" label="País" error={errors.country} {...register("country", formValidations.country)}>
@@ -152,12 +154,18 @@ export default function AddCityForm({continent, countries, onClose, onAddCity}: 
           {...register('image', formValidations.image)}
         />
 
+        <Flex direction="column" fontSize={'sm'} mt="4" color="gray.400">
+          <Text fontWeight={'bold'}>Dica: Não encontrou o país que procurava?</Text>
+          <Text>Você mesmo pode adiciona-lo voltando ao menu anterior e selicionando a opção `País`!</Text>
+        </Flex>
+
         <InputGroup justifyContent="center" pt="5">
           <Button colorScheme="red" onClick={onClose}>Cancelar</Button>
           <Button type="submit" colorScheme="yellow" color="white" ml="5" isLoading={isLoading}>Adicionar</Button>
         </InputGroup>
 
       </VStack>
+
     </Flex>
   )
 }

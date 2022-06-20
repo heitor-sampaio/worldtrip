@@ -1,4 +1,4 @@
-import { VStack, Flex, InputGroup, Button, useToast } from "@chakra-ui/react";
+import { VStack, Flex, InputGroup, Button, useToast, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FileInput, Input } from '../../components/Form/components'
@@ -82,7 +82,7 @@ export default function AddCityForm({continent, onClose, onAddCountry}: AddCityF
           countryName = removeComma.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
         }
 
-        countryName = language
+        countryName = language.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
 
         return countryName
       })
@@ -144,7 +144,13 @@ export default function AddCityForm({continent, onClose, onAddCountry}: AddCityF
   }
 
   return (
-    <Flex as="form" onSubmit={handleSubmit(handleAddCountry)} w="100%" justify="center">
+    <Flex as="form" onSubmit={handleSubmit(handleAddCountry)} direction="column" w="100%" justify="center">
+      <Flex direction="column" fontSize={'sm'} mt="4" color="gray.400">
+        <Text fontWeight={'bold'}>Instruções sobre as línguas oficiais</Text>
+        <Text>Insira cada língua oficial do país, com a grafia correta e separadas por vírgula e espaço.</Text>
+        <Text>Ex.: Ingês, Francês</Text>
+      </Flex>
+
       <VStack spacing="5" my="10">
         <Input type="text" name="name" label="Nome" error={errors.name} {...register("name", formValidations.name)}/>
 
