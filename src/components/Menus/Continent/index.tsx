@@ -1,4 +1,4 @@
-import { Button, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverHeader, PopoverTrigger, useDisclosure } from "@chakra-ui/react";
+import { Button, Placement, PlacementWithLogical, Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverHeader, PopoverTrigger, useDisclosure } from "@chakra-ui/react";
 import { FiPlusCircle } from "react-icons/fi";
 import { useAuth } from "../../../contexts/AuthContext";
 import { CityFormatted, ContinentFormatted, CountryFormatted } from "../../../types";
@@ -9,22 +9,23 @@ interface MenuProps {
   continent: ContinentFormatted,
   countries: CountryFormatted[],
   iconSize: string,
+  popOverPlacement: PlacementWithLogical,
   onAddCity: (city: CityFormatted) => void,
   onAddCountry: (country: CountryFormatted) => void,
 }
 
-export function ContinentMenu({ continent, countries, iconSize, onAddCity, onAddCountry }: MenuProps) {
+export function ContinentMenu({ continent, countries, iconSize, popOverPlacement, onAddCity, onAddCountry }: MenuProps) {
   const { user } = useAuth()
   const { isOpen, onToggle, onClose } = useDisclosure()
   
   return (
-    <Popover isLazy isOpen={isOpen} onClose={onClose} closeOnBlur={false}>
+    <Popover isLazy isOpen={isOpen} onClose={onClose} closeOnBlur={false} placement={popOverPlacement}>
       <PopoverTrigger>
         <Button variant="unstyled" mx="4" color="highlight.500" fontSize={iconSize} display="flex" justifyContent="center" onClick={onToggle}>
           <FiPlusCircle />
         </Button>
       </PopoverTrigger>
-      <PopoverContent w="auto" shadow="xl" _focus={{border: '0'}}>
+      <PopoverContent w="auto" shadow="xl" _focus={{border: '1px', borderColor: 'highlight.500'}}>
         <PopoverArrow color="highlight.500" bg="highlight.500"/>
         <PopoverHeader bg="highlight.500" color="white" px="8" fontWeight="bold" borderTopRadius="md">Adicionar</PopoverHeader>
         <PopoverBody>

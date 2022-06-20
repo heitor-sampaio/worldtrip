@@ -1,4 +1,4 @@
-import { Box, Flex, HStack, Icon, SimpleGrid, Stack, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, HStack, Icon, SimpleGrid, Stack, Text, useBreakpointValue, VStack } from "@chakra-ui/react";
 import { GetServerSideProps } from "next";
 import { AiFillFire } from "react-icons/ai";
 
@@ -24,6 +24,7 @@ export default function Continent({ continentData: continent, countriesData, cit
   const { user } = useAuth()
   const [countries, setCountries] = useState(countriesData)
   const [cities, setCities] = useState(citiesData)
+  const isMobileVersion = useBreakpointValue({base: true, md: false})
   
   const countriesNumber = countries?.length;
 
@@ -90,8 +91,12 @@ export default function Continent({ continentData: continent, countriesData, cit
               <Flex direction="row" align="center">
                 <Text fontSize={["2xl","4xl"]}>Cidade{citiesNumber > 1 && ("s")} disponíve{citiesNumber > 1 ? ("is") : ("l")}</Text>
                 
-                {/* { user?.permissions.cities.create && <AddCityModal continent={continent} countries={countries} iconSize="2xl" onAddCity={syncCities}/> } */}
-                { (user?.roles.includes('editor') || user?.roles.includes('team')) && <ContinentMenu continent={continent} countries={countries} iconSize="2xl" onAddCity={syncCities} onAddCountry={syncCountries}/> }
+                { (user?.roles.includes('editor') || user?.roles.includes('team')) && 
+                    isMobileVersion ? 
+                      <ContinentMenu continent={continent} countries={countries} iconSize="2xl" popOverPlacement="left" onAddCity={syncCities} onAddCountry={syncCountries}/>
+                    : 
+                      <ContinentMenu continent={continent} countries={countries} iconSize="2xl" popOverPlacement="right" onAddCity={syncCities} onAddCountry={syncCountries}/>
+                }
               </Flex>
               
               <Flex direction="row" ml={["0","auto"]} align="center">
@@ -114,7 +119,7 @@ export default function Continent({ continentData: continent, countriesData, cit
             { user?.permissions.cities.create && 
               <>
                 <Text>Adicione um agora!</Text>
-                <ContinentMenu continent={continent} countries={countries} iconSize="4xl" onAddCity={syncCities} onAddCountry={syncCountries}/>
+                <ContinentMenu continent={continent} countries={countries} iconSize="4xl" popOverPlacement="bottom" onAddCity={syncCities} onAddCountry={syncCountries}/>
               </>
             }
             { !user?.roles.includes('editor') && !user?.roles.includes('team') && <Text>Solicite um cargo de editor e comece a adicionar seus destinos favoritos!</Text> }
